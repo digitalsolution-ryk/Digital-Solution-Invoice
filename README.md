@@ -1,9 +1,11 @@
 # Digital Solutions — Invoicing
-**Version V-12**
+**Version V-13**
 
 A free, static invoicing web app for **Digital Solutions** (By Pass Road, Rahim Yar Khan). Runs entirely in the browser — no server, no database, no cost. Built with plain HTML, CSS and JavaScript so it can be hosted for free on GitHub Pages.
 
 ## Features
+- **Trial Balance**: a one-page overview of every customer's debit, credit and closing balance (Dr/Cr) for a date range — the classic accounting cross-check report
+- **Consistent report branding**: Ledger, Reports and Trial Balance all open with your logo, business name and address on the left, and the report name with boxed "Date From / Upto Date / Print Date" on the right — matching a professional printed report format
 - **Backup & Restore**: download all your data (invoices, customers, services, vouchers, settings) as a single JSON file from Settings — save it to Google Drive, WhatsApp, email, or a USB drive — and restore it on any device or after clearing browser data
 - **4 color themes** — Classic Navy, Ocean Blue, Emerald, and Midnight Dark, switchable instantly from Settings → Appearance
 - **Startup splash screen** — opens with Bismillah, then the Digital Solutions logo and brand, before landing on the Dashboard
@@ -72,3 +74,9 @@ npx serve .
 - Go to **Settings** in the app to change the company name, tagline, address, email, phone, WhatsApp number, currency label, invoice number prefix, and logo.
 - The same Settings page has a **Payment details** section for your Easypaisa account title/number and the bank QR code shown on invoices — upload a new QR image any time your account changes. Uploaded images are stored directly in the browser, no file upload to GitHub needed.
 - Brand colors are defined as CSS variables at the top of `style.css` (`--navy`, `--orange`, etc.) if you want to change the look and feel.
+
+## Version History
+- **V-13** — Trial Balance report; consistent branded header (logo, business name/address, report name, boxed date range) across Ledger, Reports and Trial Balance
+- **V-12** — Backup & Restore, 4 color themes, Bismillah splash screen, bottom navigation, About/developer info, dashboard-first startup with live clock, one-page print fix
+
+*(To ship a future update: bump `APP_VERSION` in `script.js`, and `splashVersion` default in `index.html`.)*

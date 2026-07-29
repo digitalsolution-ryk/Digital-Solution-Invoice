@@ -29,7 +29,7 @@
     <div class="splash-tagline">Invoicing &amp; Accounts</div>
     <div class="splash-progress"><div class="splash-progress-bar"></div></div>
   </div>
-  <div class="splash-version" id="splashVersion">V-12</div>
+  <div class="splash-version" id="splashVersion">V-13</div>
 </div>
 
 <datalist id="serviceNames"></datalist>
@@ -57,6 +57,7 @@
       <button class="rail-btn" data-view="services" type="button"><span class="ico">&#128230;</span> Services</button>
       <button class="rail-btn" data-view="vouchers" type="button"><span class="ico">&#128179;</span> Cash Receipt/Payment</button>
       <button class="rail-btn" data-view="ledger" type="button"><span class="ico">&#128213;</span> Ledger</button>
+      <button class="rail-btn" data-view="trialbalance" type="button"><span class="ico">&#9878;&#65039;</span> Trial Balance</button>
       <button class="rail-btn" data-view="reports" type="button"><span class="ico">&#128200;</span> Reports</button>
       <button class="rail-btn" data-view="settings" type="button"><span class="ico">&#9881;</span> Settings</button>
     </nav>
@@ -443,16 +444,21 @@
 
       <div class="panel printable" id="ledgerPrintArea" style="padding:20px 22px; margin-top:16px;">
         <div id="ledgerHead" hidden>
-          <div class="ledger-head-row">
-            <div class="ledger-head-brand">
-              <img id="ledgerLogoImg" class="ledger-logo" alt="Logo" />
-              <strong id="ledgerCompanyName">DIGITAL SOLUTIONS</strong>
+          <div class="report-head">
+            <div class="report-head-left">
+              <img id="ledgerLogoImg" class="report-head-logo" alt="Logo" />
+              <div>
+                <div class="report-head-bizname" id="ledgerCompanyName">DIGITAL SOLUTIONS</div>
+                <div class="report-head-addr" id="ledgerCompanyAddr"></div>
+              </div>
             </div>
-            <div class="ledger-head-title">
-              <div class="ledger-report-title">General Ledger</div>
-              <div class="ledger-meta-line">Date From: <span id="ledgerFromLabel">—</span></div>
-              <div class="ledger-meta-line">Upto Date: <span id="ledgerToLabel">—</span></div>
-              <div class="ledger-meta-line">Print Date: <span id="ledgerPrintDate">—</span></div>
+            <div class="report-head-right">
+              <div class="report-head-title">General Ledger</div>
+              <div class="report-date-boxes">
+                <div class="report-date-box"><span class="report-date-label">Date From</span><span class="report-date-value" id="ledgerFromLabel">—</span></div>
+                <div class="report-date-box"><span class="report-date-label">Upto Date</span><span class="report-date-value" id="ledgerToLabel">—</span></div>
+                <div class="report-date-box"><span class="report-date-label">Print Date</span><span class="report-date-value" id="ledgerPrintDate">—</span></div>
+              </div>
             </div>
           </div>
           <div class="ledger-cust-row">
@@ -471,6 +477,49 @@
           <div class="stotal-banner"><span>Closing balance</span><span class="mono" id="ledgerClosing">Rs. 0</span></div>
         </div>
         <p class="empty-state" id="ledgerEmpty">Select a customer and click Generate to view their ledger.</p>
+      </div>
+    </section>
+
+    <!-- ===== TRIAL BALANCE ===== -->
+    <section id="trialbalanceView" class="view" hidden>
+      <div class="panel form-panel">
+        <div class="row-inline wrap">
+          <input type="date" id="tbFrom" />
+          <span class="opt">to</span>
+          <input type="date" id="tbTo" />
+          <button class="btn btn-outline btn-sm" id="btnTbGenerate" type="button">Generate</button>
+          <button class="btn btn-ghost btn-sm" id="btnTbPrint" type="button">Print</button>
+        </div>
+      </div>
+
+      <div class="panel printable" id="tbPrintArea" style="padding:20px 22px; margin-top:16px;">
+        <div class="report-head">
+          <div class="report-head-left">
+            <img id="tbLogoImg" class="report-head-logo" alt="Logo" />
+            <div>
+              <div class="report-head-bizname" id="tbCompanyName">DIGITAL SOLUTIONS</div>
+              <div class="report-head-addr" id="tbCompanyAddr"></div>
+            </div>
+          </div>
+          <div class="report-head-right">
+            <div class="report-head-title">Trial Balance</div>
+            <div class="report-date-boxes">
+              <div class="report-date-box"><span class="report-date-label">Date From</span><span class="report-date-value" id="tbFromLabel">—</span></div>
+              <div class="report-date-box"><span class="report-date-label">Upto Date</span><span class="report-date-value" id="tbToLabel">—</span></div>
+              <div class="report-date-box"><span class="report-date-label">Print Date</span><span class="report-date-value" id="tbPrintDate">—</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="report-table" id="tbTable">
+            <thead><tr><th>Customer</th><th>Debit</th><th>Credit</th><th>Balance</th></tr></thead>
+            <tbody id="tbBody"></tbody>
+          </table>
+        </div>
+        <div class="ledger-totals" id="tbTotalsWrap" hidden>
+          <div class="stotal-banner"><span>Totals</span><span class="mono"><span id="tbTotalDebit">Rs. 0</span> / <span id="tbTotalCredit">Rs. 0</span></span></div>
+        </div>
+        <p class="empty-state" id="tbEmpty">Click Generate to view balances for every customer.</p>
       </div>
     </section>
 
@@ -518,9 +567,22 @@
       </div>
 
       <div class="panel printable" id="reportPrintArea" style="padding:20px 22px; margin-top:16px;">
-        <div class="report-print-head" id="reportPrintHead" hidden>
-          <strong id="repPrintTitle">Digital Solutions — Report</strong>
-          <span id="repPrintRange"></span>
+        <div class="report-head">
+          <div class="report-head-left">
+            <img id="repLogoImg" class="report-head-logo" alt="Logo" />
+            <div>
+              <div class="report-head-bizname" id="repCompanyName">DIGITAL SOLUTIONS</div>
+              <div class="report-head-addr" id="repCompanyAddr"></div>
+            </div>
+          </div>
+          <div class="report-head-right">
+            <div class="report-head-title">Sales Report</div>
+            <div class="report-date-boxes">
+              <div class="report-date-box"><span class="report-date-label">Date From</span><span class="report-date-value" id="repFromLabel">—</span></div>
+              <div class="report-date-box"><span class="report-date-label">Upto Date</span><span class="report-date-value" id="repToLabel">—</span></div>
+              <div class="report-date-box"><span class="report-date-label">Print Date</span><span class="report-date-value" id="repPrintDate">—</span></div>
+            </div>
+          </div>
         </div>
         <div class="table-wrap">
           <table class="report-table" id="reportTable">
@@ -686,6 +748,7 @@
   <button class="nav-item" data-view="services" type="button"><span class="nav-icon">&#128230;</span><span class="nav-label">Services</span></button>
   <button class="nav-item" data-view="vouchers" type="button"><span class="nav-icon">&#128179;</span><span class="nav-label">Cash</span></button>
   <button class="nav-item" data-view="ledger" type="button"><span class="nav-icon">&#128213;</span><span class="nav-label">Ledger</span></button>
+  <button class="nav-item" data-view="trialbalance" type="button"><span class="nav-icon">&#9878;&#65039;</span><span class="nav-label">Trial Bal.</span></button>
   <button class="nav-item" data-view="reports" type="button"><span class="nav-icon">&#128200;</span><span class="nav-label">Reports</span></button>
   <button class="nav-item" data-view="settings" type="button"><span class="nav-icon">&#9881;&#65039;</span><span class="nav-label">Settings</span></button>
 </nav>
