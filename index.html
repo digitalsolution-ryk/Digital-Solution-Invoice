@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Digital Solutions — Invoicing</title>
+<meta name="description" content="Create, track and share professional invoices for Digital Solutions." />
+<meta name="theme-color" content="#1B2130" />
+<link rel="manifest" href="manifest.json" />
+<link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAMAAABlApw1AAAAwFBMVEX///////3+///9//79//v7//3+/v/9/f/8/v/8/f///v7+/v7+/v3+/f39/v79/f3+/vv9/vr9/fv8/v78/v38/f78/vv8/fv7/v77/fv6/v79/P38/Pr7/P37+/n7+vr5+vr4+Pj2+fv29vfz9fft8PXc4erEydemrLyEi55iaX5ES2IlMlIZKlEXJEkQJVQOJlYOJFQOIk8LJFULIlEKIU8KIFAKH0oNHUUNFzcHG0gFFDwCDTMDCyYABSYBAhSKziV9AAAlkElEQVR42u18CXvayNJ1I2EJWSAJgUD7zr5jNoHA//9ffadaOHbuTGbBzn3v9zyuSZxMEtt91LWcU11qxr7t277t277t277t277t277t277t277t277t277tf8qUv7Eut16v+qXebrdbnqwo9tOT5bpuRxQ1XXGfeu2eDFMUq3v/PKv7r4w+Rf69AOyuzgEYnifJZu+p17PtjmY2dR1oAMDjABTrcQDK7wfQrdfrba8lyfqT47Trmtg3TSy8wwF4uvzh8/7HANxN6zq9HhYqd3sO9uLZhEeZkqx0ej3z/wsAsmtrpmnqXYoFrN0kj5IlueP08JsPALrW/yYASxFFs42A5gB8wzB9PHn4UK/XNvX/3IF75P9jAO7vAfDxWSqWoLXrdbvTdfoAgMW3DSMKKgBaV/kPAN3/SwABjAOw7eD+TexukES5aViB2+0gej3PCrALiSd1sNofACxu3X/vQl+8A8iHMnehzt2NbBc+FGVJJL1/ds0LjQhpVeb+8pPT9f6PAciCIMh/yEKsZSQZywdvpqiZ5yWyrHVRGLq/jJ3/DgD5PQZlRRZFEX8gK11R0/A4ner76GYtjNLx9G6TIUsClngtVewKLfx721aUTodvoOP+08WL3aeO3LG+EgBH0JGUwHK6LR1h0K0AOIGvBsJwdruVZXm73Yoxi+O6YXhmX5MkAkBL5wA0fFb/n++ArIGZfKELAUDDtYI4dlS4h93toIbxHfCtgI2W5Xa12m635W2SunFoGK3mjxz69hj+VRSLCDjb/YI64FLIKrLUkGSJElGaBLKmdURBbbUo0RhepItsXFzWsNXqdJsNmZm0m54Os7oyipzZUlGp4REt8V8AkL+KzOFbS0Gkq01NbcVxEOR5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" type="image/png" />
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAMAAABlApw1AAAAwFBMVEX///////3+///9//79//v7//3+/v/9/f/8/v/8/f///v7+/v7+/v3+/f39/v79/f3+/vv9/vr9/fv8/v78/v38/f78/vv8/fv7/v77/fv6/v79/P38/Pr7/P37+/n7+vr5+vr4+Pj2+fv29vfz9fft8PXc4erEydemrLyEi55iaX5ES2IlMlIZKlEXJEkQJVQOJlYOJFQOIk8LJFULIlEKIU8KIFAKH0oNHUUNFzcHG0gFFDwCDTMDCyYABSYBAhSKziV9AAAlkElEQVR42u18CXvayNJ1I2EJWSAJgUD7zr5jNoHA//9ffadaOHbuTGbBzn3v9zyuSZxMEtt91LWcU11qxr7t277t277t277t277t277t277t277t277t277tf8qUv7Eut16v+qXebrdbnqwo9tOT5bpuRxQ1XXGfeu2eDFMUq3v/PKv7r4w+Rf69AOyuzgEYnifJZu+p17PtjmY2dR1oAMDjABTrcQDK7wfQrdfrba8lyfqT47Trmtg3TSy8wwF4uvzh8/7HANxN6zq9HhYqd3sO9uLZhEeZkqx0ej3z/wsAsmtrpmnqXYoFrN0kj5IlueP08JsPALrW/yYASxFFs42A5gB8wzB9PHn4UK/XNvX/3IF75P9jAO7vAfDxWSqWoLXrdbvTdfoAgMW3DSMKKgBaV/kPAN3/SwABjAOw7eD+TexukES5aViB2+0gej3PCrALiSd1sNofACxu3X/vQl+8A8iHMnehzt2NbBc+FGVJJL1/ds0LjQhpVeb+8pPT9f6PAciCIMh/yEKsZSQZywdvpqiZ5yWyrHVRGLq/jJ3/DgD5PQZlRRZFEX8gK11R0/A4ner76GYtjNLx9G6TIUsClngtVewKLfx721aUTodvoOP+08WL3aeO3LG+EgBH0JGUwHK6LR1h0K0AOIGvBsJwdruVZXm73Yoxi+O6YXhmX5MkAkBL5wA0fFb/n++ArIGZfKELAUDDtYI4dlS4h93toIbxHfCtgI2W5Xa12m635W2SunFoGK3mjxz69hj+VRSLCDjb/YI64FLIKrLUkGSJElGaBLKmdURBbbUo0RhepItsXFzWsNXqdJsNmZm0m54Os7oyipzZUlGp4REt8V8AkL+KzOFbS0Gkq01NbcVxEOR5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" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Amiri:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ===== STARTUP SPLASH (Bismillah) ===== -->
+<div id="splashScreen" class="splash-overlay">
+  <div class="splash-inner">
+    <div class="splash-bismillah" lang="ar" dir="rtl">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+    <div class="splash-translation">In the name of Allah, the Most Gracious, the Most Merciful</div>
+    <div class="splash-brandrow">
+      <img id="splashLogoImg" class="splash-logo" alt="Logo" />
+      <div class="splash-brand" id="splashBrandName">DIGITAL SOLUTIONS</div>
+    </div>
+    <div class="splash-tagline">Invoicing &amp; Accounts</div>
+    <div class="splash-progress"><div class="splash-progress-bar"></div></div>
+  </div>
+  <div class="splash-version" id="splashVersion">V-12</div>
+</div>
+
+<datalist id="serviceNames"></datalist>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="rail">
+    <div class="rail-brand">
+      <span class="mark" id="railMark" aria-hidden="true">&#9670;</span>
+      <div class="rail-brand-text">
+        <strong id="railName1">DIGITAL</strong>
+        <strong id="railName2">SOLUTIONS</strong>
+      </div>
+      <button class="rail-hamburger" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <nav class="rail-nav" id="railNav">
+      <button class="rail-btn" data-view="dashboard" type="button"><span class="ico">&#128202;</span> Dashboard</button>
+      <button class="rail-btn is-active" data-view="builder" type="button"><span class="ico">&#10133;</span> New invoice</button>
+      <button class="rail-btn" data-view="invoices" type="button"><span class="ico">&#128203;</span> Invoices</button>
+      <button class="rail-btn" data-view="customers" type="button"><span class="ico">&#128100;</span> Customers</button>
+      <button class="rail-btn" data-view="services" type="button"><span class="ico">&#128230;</span> Services</button>
+      <button class="rail-btn" data-view="vouchers" type="button"><span class="ico">&#128179;</span> Cash Receipt/Payment</button>
+      <button class="rail-btn" data-view="ledger" type="button"><span class="ico">&#128213;</span> Ledger</button>
+      <button class="rail-btn" data-view="reports" type="button"><span class="ico">&#128200;</span> Reports</button>
+      <button class="rail-btn" data-view="settings" type="button"><span class="ico">&#9881;</span> Settings</button>
+    </nav>
+
+    <div class="rail-foot">
+      <button class="install-btn rail-install-btn" id="btnInstallAppRail" type="button" hidden>&#11015; Install App</button>
+      <p id="railAddress">BY PASS ROAD<br>RAHIM YAR KHAN</p>
+      <p class="rail-contact">&#9993; <span id="railEmail">Digitalsolution.ryk@gmail.com</span></p>
+      <p class="rail-contact">&#9742; <span id="railPhone">+92-300-9630013</span></p>
+    </div>
+  </aside>
+  <div class="nav-backdrop" id="navBackdrop" hidden></div>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <header class="toolbar">
+      <div class="toolbar-title">
+        <h1 id="viewTitle">New invoice</h1>
+        <p class="sub" id="viewSub">Fill in the details below — totals update automatically.</p>
+      </div>
+      <div class="toolbar-actions" id="builderActions">
+        <button class="btn btn-ghost" id="btnClear" type="button">Clear</button>
+        <button class="btn btn-outline" id="btnSave" type="button">Save invoice</button>
+        <button class="btn btn-outline" id="btnPrint" type="button">Print</button>
+        <button class="btn btn-outline" id="btnShare" type="button">Share on WhatsApp</button>
+        <button class="btn btn-primary" id="btnPdf" type="button">Download PDF</button>
+      </div>
+    </header>
+
+    <!-- ===== DASHBOARD ===== -->
+    <section id="dashboardView" class="view" hidden>
+      <div class="stat-grid">
+        <div class="stat-card">
+          <span class="stat-label">Today's sales</span>
+          <span class="stat-value mono" id="statToday">Rs. 0</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Total invoices</span>
+          <span class="stat-value mono" id="statCount">0</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">This month's revenue</span>
+          <span class="stat-value mono" id="statMonth">Rs. 0</span>
+        </div>
+        <div class="stat-card accent">
+          <span class="stat-label">Outstanding balance</span>
+          <span class="stat-value mono" id="statOutstanding">Rs. 0</span>
+        </div>
+      </div>
+
+      <div class="panel" style="padding:20px 22px; margin-top:18px;">
+        <div class="panel-title-row">
+          <h2 class="panel-title">Recent invoices</h2>
+          <button class="btn btn-outline btn-sm" data-view="invoices" type="button">View all</button>
+        </div>
+        <div id="recentList" class="history-list"></div>
+        <p class="empty-state" id="recentEmpty" hidden>No invoices yet — create your first invoice to see it here.</p>
+      </div>
+    </section>
+
+    <!-- ===== BUILDER ===== -->
+    <section id="builderView" class="view">
+      <div class="builder-grid">
+
+        <div class="panel form-panel">
+
+          <div class="field-row two">
+            <div class="field">
+              <label for="invNumber">Invoice no.</label>
+              <input type="text" id="invNumber" class="mono" readonly />
+            </div>
+            <div class="field">
+              <label for="invDate">Invoice date</label>
+              <input type="date" id="invDate" />
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="panel-title-row">
+            <h2 class="panel-title">Bill to</h2>
+          </div>
+          <div class="field">
+            <label for="custSelect">Select existing customer <span class="opt">(optional)</span></label>
+            <select id="custSelect">
+              <option value="">— New customer —</option>
+            </select>
+          </div>
+          <div class="field-row two">
+            <div class="field">
+              <label for="custName">Customer name</label>
+              <input type="text" id="custName" placeholder="e.g. Ahmed Traders" />
+            </div>
+            <div class="field">
+              <label for="custWhatsapp">WhatsApp number</label>
+              <input type="tel" id="custWhatsapp" placeholder="+92 3XX XXXXXXX" />
+            </div>
+          </div>
+          <div class="field-row two">
+            <div class="field">
+              <label for="custAddress">Address</label>
+              <input type="text" id="custAddress" placeholder="Customer address" />
+            </div>
+            <div class="field">
+              <label for="custEmail">Email <span class="opt">(optional)</span></label>
+              <input type="email" id="custEmail" placeholder="name@example.com" />
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="panel-title-row">
+            <h2 class="panel-title">Services</h2>
+            <div class="row-inline">
+              <select id="svcPicker">
+                <option value="">+ Pick saved service…</option>
+              </select>
+              <button class="btn btn-outline btn-sm" id="btnAddRow" type="button">+ Blank row</button>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table class="svc-table" id="svcTable">
+              <thead>
+                <tr>
+                  <th class="col-desc">Description</th>
+                  <th class="col-num">Rate</th>
+                  <th class="col-num">Qty</th>
+                  <th class="col-num">Total</th>
+                  <th class="col-del"></th>
+                </tr>
+              </thead>
+              <tbody id="svcBody"></tbody>
+            </table>
+          </div>
+
+          <div class="totals-block">
+            <div class="totals-row">
+              <span>Subtotal</span>
+              <span class="mono" id="sumSubtotal">Rs. 0</span>
+            </div>
+            <div class="totals-row discount-row">
+              <span>Discount <span class="opt">(optional)</span></span>
+              <div class="discount-inputs">
+                <select id="discType" class="mini-select">
+                  <option value="pct">%</option>
+                  <option value="flat">Flat</option>
+                </select>
+                <input type="number" id="discValue" min="0" step="0.01" value="0" class="mono mini-input" />
+              </div>
+            </div>
+            <div class="totals-row grand">
+              <span>Grand total</span>
+              <span class="mono" id="sumGrand">Rs. 0</span>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <h2 class="panel-title">Payment</h2>
+          <div class="field-row two">
+            <div class="field">
+              <label for="paymentStatus">Payment status</label>
+              <select id="paymentStatus">
+                <option value="unpaid">Unpaid</option>
+                <option value="paid">Paid</option>
+                <option value="partial">Partial payment</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="paidAmount">Amount received</label>
+              <input type="number" id="paidAmount" class="mono" min="0" step="0.01" value="0" />
+            </div>
+          </div>
+          <div class="totals-row balance-row" id="balanceRow" hidden>
+            <span>Balance due</span>
+            <span class="mono" id="sumBalance">Rs. 0</span>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="field">
+            <label for="notes">Notes <span class="opt">(optional)</span></label>
+            <textarea id="notes" rows="3" placeholder="Payment terms, bank details, thank-you note…"></textarea>
+          </div>
+        </div>
+
+        <!-- Preview -->
+        <div class="panel preview-panel">
+          <div class="preview-scroll">
+            <div class="invoice-sheet printable" id="invoiceSheet">
+
+              <div class="sheet-top">
+                <div class="sheet-companyblock">
+                  <div class="sheet-logorow">
+                    <img id="sheetLogoImg" class="sheet-logo" alt="Logo" />
+                    <div class="sheet-companyname-wrap">
+                      <div class="sheet-brand-name" id="sheetBrandName">DIGITAL SOLUTIONS</div>
+                      <div class="sheet-tagline" id="sheetTagline">SMART FUEL MANAGEMENT</div>
+                    </div>
+                  </div>
+                  <div class="sheet-companydetails">
+                    <div id="sheetAddr">BY PASS ROAD, RAHIM YAR KHAN</div>
+                    <div>&#9993; <span id="sheetEmail">Digitalsolution.ryk@gmail.com</span></div>
+                    <div>&#9742; <span id="sheetPhone">+92-300-9630013</span></div>
+                  </div>
+                </div>
+                <div class="sheet-invoiceblock">
+                  <div class="sheet-invoice-title">INVOICE</div>
+                  <div class="sheet-invoice-number mono" id="pvNumber">—</div>
+                  <div class="sheet-invoice-date">Date: <span class="mono" id="pvDate">—</span></div>
+                  <span class="status-badge" id="pvStatusBadge">Unpaid</span>
+                </div>
+              </div>
+
+              <div class="sheet-billto-banner"><span>Bill To</span></div>
+              <div class="sheet-billto-body">
+                <div class="billto-name" id="pvCustName">Customer name</div>
+                <div class="billto-line" id="pvCustAddress"></div>
+                <div class="billto-line" id="pvCustContact"></div>
+              </div>
+
+              <table class="sheet-table">
+                <thead>
+                  <tr><th class="sno">S.No</th><th>Description</th><th>Qty</th><th>Unit Price</th><th>Amount</th></tr>
+                </thead>
+                <tbody id="pvBody"></tbody>
+              </table>
+
+              <div class="sheet-totals-block">
+                <div class="stotal-row"><span>Total Qty</span><span class="mono" id="pvTotalQty">0</span></div>
+                <div class="stotal-row"><span>Sub Total</span><span class="mono" id="pvSubtotal">Rs. 0</span></div>
+                <div class="stotal-row" id="pvDiscRow" hidden><span id="pvDiscLabel">Discount</span><span class="mono" id="pvDiscount">Rs. 0</span></div>
+                <div class="stotal-banner"><span>TOTAL AMOUNT</span><span class="mono" id="pvGrand">Rs. 0</span></div>
+                <div class="stotal-row" id="pvPaidRow" hidden><span>Received</span><span class="mono" id="pvPaid">Rs. 0</span></div>
+                <div class="stotal-row balance" id="pvBalanceRow" hidden><span>Balance due</span><span class="mono" id="pvBalance">Rs. 0</span></div>
+              </div>
+
+              <div class="sheet-words">
+                <span class="meta-label">Amount in words</span>
+                <p id="pvAmountWords">—</p>
+              </div>
+
+              <div class="sheet-notes" id="pvNotesWrap" hidden>
+                <span class="meta-label">Notes</span>
+                <p id="pvNotes"></p>
+              </div>
+
+              <div class="sheet-payment-block">
+                <span class="meta-label">For online payment</span>
+                <div class="sheet-payment">
+                  <img id="pvPaymentQr" class="payment-qr-img" alt="Payment QR" />
+                  <div class="payment-details">
+                    <div class="payment-line"><strong>HBL</strong> — scan to pay</div>
+                    <div class="payment-line"><strong id="pvEasypaisaTitle">Waqar Ali</strong> (Easypaisa)</div>
+                    <div class="payment-line mono" id="pvEasypaisaNumber">0300-9630013</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="sheet-footer">
+                <span>For, <span id="sheetFooterName">Digital Solutions</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===== INVOICES / HISTORY ===== -->
+    <section id="invoicesView" class="view" hidden>
+      <div class="panel">
+        <div class="history-toolbar">
+          <input type="search" id="historySearch" placeholder="Search by customer or invoice no…" />
+          <select id="historyStatusFilter">
+            <option value="">All statuses</option>
+            <option value="paid">Paid</option>
+            <option value="unpaid">Unpaid</option>
+            <option value="partial">Partial</option>
+          </select>
+        </div>
+        <div id="historyList" class="history-list"></div>
+        <p class="empty-state" id="historyEmpty" hidden>No invoices saved yet. Invoices you save will appear here.</p>
+      </div>
+    </section>
+
+    <!-- ===== CUSTOMERS ===== -->
+    <section id="customersView" class="view" hidden>
+      <div class="panel form-panel">
+        <h2 class="panel-title" id="custFormTitle">Add customer</h2>
+        <div class="field-row two">
+          <div class="field"><label for="cName">Name</label><input type="text" id="cName" /></div>
+          <div class="field"><label for="cWhatsapp">WhatsApp number</label><input type="tel" id="cWhatsapp" /></div>
+        </div>
+        <div class="field-row two">
+          <div class="field"><label for="cAddress">Address</label><input type="text" id="cAddress" /></div>
+          <div class="field"><label for="cEmail">Email <span class="opt">(optional)</span></label><input type="email" id="cEmail" /></div>
+        </div>
+        <div class="field-row two">
+          <div class="field"><label for="cOpeningBalance">Opening balance <span class="opt">(amount already owed, if any)</span></label><input type="number" id="cOpeningBalance" class="mono" min="0" step="0.01" value="0" /></div>
+        </div>
+        <div class="row-inline">
+          <button class="btn btn-primary" id="btnCustSave" type="button">Save customer</button>
+          <button class="btn btn-ghost" id="btnCustCancel" type="button" hidden>Cancel edit</button>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top:16px;">
+        <div class="history-toolbar"><input type="search" id="custSearch" placeholder="Search customers…" /></div>
+        <div id="customerList" class="history-list"></div>
+        <p class="empty-state" id="customerEmpty" hidden>No customers saved yet.</p>
+      </div>
+    </section>
+
+    <!-- ===== CASH RECEIPT / PAYMENT VOUCHERS ===== -->
+    <section id="vouchersView" class="view" hidden>
+      <div class="panel form-panel">
+        <h2 class="panel-title" id="voucherFormTitle">New voucher</h2>
+        <div class="field-row two">
+          <div class="field">
+            <label for="vType">Type</label>
+            <select id="vType">
+              <option value="receipt">Cash Receipt (money received)</option>
+              <option value="payment">Cash Payment (money paid out)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="vCustomer">Customer</label>
+            <select id="vCustomer">
+              <option value="">— Select customer —</option>
+            </select>
+          </div>
+        </div>
+        <div class="field-row two">
+          <div class="field"><label for="vDate">Date</label><input type="date" id="vDate" /></div>
+          <div class="field"><label for="vAmount">Amount</label><input type="number" id="vAmount" class="mono" min="0" step="0.01" /></div>
+        </div>
+        <div class="field">
+          <label for="vDescription">Description / reference <span class="opt">(optional)</span></label>
+          <input type="text" id="vDescription" placeholder="e.g. Cash paid via Easypaisa, advance received…" />
+        </div>
+        <div class="row-inline">
+          <button class="btn btn-primary" id="btnVoucherSave" type="button">Save voucher</button>
+          <button class="btn btn-ghost" id="btnVoucherCancel" type="button" hidden>Cancel edit</button>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top:16px;">
+        <div class="history-toolbar">
+          <input type="search" id="voucherSearch" placeholder="Search by customer or voucher no…" />
+          <select id="voucherTypeFilter">
+            <option value="">All types</option>
+            <option value="receipt">Receipts</option>
+            <option value="payment">Payments</option>
+          </select>
+        </div>
+        <div id="voucherList" class="history-list"></div>
+        <p class="empty-state" id="voucherEmpty" hidden>No vouchers recorded yet.</p>
+      </div>
+    </section>
+
+    <!-- ===== LEDGER ===== -->
+    <section id="ledgerView" class="view" hidden>
+      <div class="panel form-panel">
+        <div class="row-inline wrap">
+          <select id="ledgerCustomer">
+            <option value="">— Select customer —</option>
+          </select>
+          <input type="date" id="ledgerFrom" />
+          <span class="opt">to</span>
+          <input type="date" id="ledgerTo" />
+          <button class="btn btn-outline btn-sm" id="btnLedgerGenerate" type="button">Generate</button>
+          <button class="btn btn-ghost btn-sm" id="btnLedgerPrint" type="button">Print ledger</button>
+        </div>
+      </div>
+
+      <div class="panel printable" id="ledgerPrintArea" style="padding:20px 22px; margin-top:16px;">
+        <div id="ledgerHead" hidden>
+          <div class="ledger-head-row">
+            <div class="ledger-head-brand">
+              <img id="ledgerLogoImg" class="ledger-logo" alt="Logo" />
+              <strong id="ledgerCompanyName">DIGITAL SOLUTIONS</strong>
+            </div>
+            <div class="ledger-head-title">
+              <div class="ledger-report-title">General Ledger</div>
+              <div class="ledger-meta-line">Date From: <span id="ledgerFromLabel">—</span></div>
+              <div class="ledger-meta-line">Upto Date: <span id="ledgerToLabel">—</span></div>
+              <div class="ledger-meta-line">Print Date: <span id="ledgerPrintDate">—</span></div>
+            </div>
+          </div>
+          <div class="ledger-cust-row">
+            Customer: <strong id="ledgerCustName"></strong>
+            <span id="ledgerCustPhoneWrap" hidden>— <span id="ledgerCustPhone"></span></span>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="report-table" id="ledgerTable">
+            <thead><tr><th>Date</th><th>Voucher #</th><th>Description</th><th>Debit</th><th>Credit</th><th>Balance</th></tr></thead>
+            <tbody id="ledgerBody"></tbody>
+          </table>
+        </div>
+        <div class="ledger-totals" id="ledgerTotalsWrap" hidden>
+          <div class="stotal-row"><span>Total</span><span class="mono"><span id="ledgerTotalDebit">Rs. 0</span> / <span id="ledgerTotalCredit">Rs. 0</span></span></div>
+          <div class="stotal-banner"><span>Closing balance</span><span class="mono" id="ledgerClosing">Rs. 0</span></div>
+        </div>
+        <p class="empty-state" id="ledgerEmpty">Select a customer and click Generate to view their ledger.</p>
+      </div>
+    </section>
+
+    <!-- ===== SERVICES ===== -->
+    <section id="servicesView" class="view" hidden>
+      <div class="panel form-panel">
+        <h2 class="panel-title" id="svcFormTitle">Add service</h2>
+        <div class="field-row two">
+          <div class="field"><label for="sName">Service name</label><input type="text" id="sName" /></div>
+          <div class="field"><label for="sRate">Default rate</label><input type="number" id="sRate" min="0" step="0.01" class="mono" /></div>
+        </div>
+        <div class="row-inline">
+          <button class="btn btn-primary" id="btnSvcSave" type="button">Save service</button>
+          <button class="btn btn-ghost" id="btnSvcCancel" type="button" hidden>Cancel edit</button>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top:16px;">
+        <div id="serviceList" class="history-list"></div>
+        <p class="empty-state" id="serviceEmpty" hidden>No saved services yet. Add your common services once, then pick them instantly in every invoice.</p>
+      </div>
+    </section>
+
+    <!-- ===== REPORTS ===== -->
+    <section id="reportsView" class="view" hidden>
+      <div class="panel form-panel">
+        <div class="row-inline wrap">
+          <button class="btn btn-outline btn-sm" data-range="today" type="button">Today</button>
+          <button class="btn btn-outline btn-sm" data-range="week" type="button">This week</button>
+          <button class="btn btn-outline btn-sm" data-range="month" type="button">This month</button>
+          <span class="opt" style="margin:0 4px;">or custom range:</span>
+          <input type="date" id="repFrom" />
+          <span class="opt">to</span>
+          <input type="date" id="repTo" />
+          <button class="btn btn-outline btn-sm" id="btnRepApply" type="button">Apply</button>
+          <button class="btn btn-ghost btn-sm" id="btnRepPrint" type="button">Print report</button>
+        </div>
+      </div>
+
+      <div class="stat-grid" style="margin-top:16px;" id="reportStats">
+        <div class="stat-card"><span class="stat-label">Invoices</span><span class="stat-value mono" id="repCount">0</span></div>
+        <div class="stat-card"><span class="stat-label">Total billed</span><span class="stat-value mono" id="repGrand">Rs. 0</span></div>
+        <div class="stat-card"><span class="stat-label">Received</span><span class="stat-value mono" id="repPaid">Rs. 0</span></div>
+        <div class="stat-card accent"><span class="stat-label">Outstanding</span><span class="stat-value mono" id="repOutstanding">Rs. 0</span></div>
+      </div>
+
+      <div class="panel printable" id="reportPrintArea" style="padding:20px 22px; margin-top:16px;">
+        <div class="report-print-head" id="reportPrintHead" hidden>
+          <strong id="repPrintTitle">Digital Solutions — Report</strong>
+          <span id="repPrintRange"></span>
+        </div>
+        <div class="table-wrap">
+          <table class="report-table" id="reportTable">
+            <thead><tr><th>Invoice No.</th><th>Date</th><th>Customer</th><th>Status</th><th>Amount</th><th>Balance</th></tr></thead>
+            <tbody id="reportBody"></tbody>
+          </table>
+        </div>
+        <p class="empty-state" id="reportEmpty" hidden>No invoices in this range.</p>
+      </div>
+    </section>
+
+    <!-- ===== SETTINGS ===== -->
+    <section id="settingsView" class="view" hidden>
+      <div class="panel form-panel install-panel">
+        <h2 class="panel-title">Install app</h2>
+        <p class="opt" style="margin:-4px 0 12px;">Add Digital Solutions Invoicing to your home screen — it opens like a normal app and works offline.</p>
+        <button class="btn btn-primary install-btn" id="btnInstallApp" type="button" hidden>&#11015; Install app</button>
+        <p class="opt" id="installHint">
+          On Android/Chrome: tap the menu (⋮) and choose <strong>"Install app"</strong> or <strong>"Add to Home screen"</strong>.<br>
+          On iPhone/Safari: tap the Share icon and choose <strong>"Add to Home Screen"</strong>.
+        </p>
+        <p class="opt" id="installedMsg" hidden>&#9989; This app is already installed on this device.</p>
+      </div>
+
+      <div class="panel form-panel" style="margin-top:16px;">
+        <h2 class="panel-title">Company information</h2>
+        <div class="field-row two">
+          <div class="field"><label for="setName">Company name</label><input type="text" id="setName" /></div>
+          <div class="field"><label for="setTagline">Tagline <span class="opt">(optional)</span></label><input type="text" id="setTagline" placeholder="e.g. Smart Fuel Management" /></div>
+        </div>
+        <div class="field-row two">
+          <div class="field"><label for="setPhone">Phone (shown on invoice)</label><input type="text" id="setPhone" /></div>
+          <div class="field"><label for="setAddress">Address</label><input type="text" id="setAddress" /></div>
+        </div>
+        <div class="field-row two">
+          <div class="field"><label for="setEmail">Email</label><input type="email" id="setEmail" /></div>
+          <div class="field"><label for="setWhatsapp">Company WhatsApp <span class="opt">(for sharing invoices)</span></label><input type="tel" id="setWhatsapp" /></div>
+        </div>
+        <div class="field-row two">
+          <div class="field"><label for="setPrefix">Invoice number prefix</label><input type="text" id="setPrefix" maxlength="6" /></div>
+          <div class="field"><label for="setCurrency">Currency label</label><input type="text" id="setCurrency" placeholder="Rs. " /></div>
+        </div>
+        <div class="field">
+          <label for="setInvoiceFormat">Invoice paper size <span class="opt">(used for print, PDF and share)</span></label>
+          <select id="setInvoiceFormat">
+            <option value="a4">A4 (standard)</option>
+            <option value="a5">A5 (half page)</option>
+            <option value="thermal">Thermal receipt (80mm)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="setLogo">Logo <span class="opt">(optional, replaces the mark)</span></label>
+          <div class="row-inline">
+            <img id="setLogoPreview" class="settings-preview" alt="" />
+            <input type="file" id="setLogo" accept="image/*" />
+            <button class="btn btn-ghost btn-sm" id="btnLogoRemove" type="button">Reset to default</button>
+          </div>
+        </div>
+        <div class="row-inline">
+          <button class="btn btn-primary" id="btnSettingsSave" type="button">Save settings</button>
+          <span class="opt" id="settingsSavedMsg"></span>
+        </div>
+      </div>
+
+      <div class="panel form-panel" style="margin-top:16px;">
+        <h2 class="panel-title">Payment details</h2>
+        <p class="opt" style="margin:-6px 0 14px;">Shown on every invoice so customers can pay you directly.</p>
+        <div class="field-row two">
+          <div class="field"><label for="setEasypaisaTitle">Easypaisa account title</label><input type="text" id="setEasypaisaTitle" /></div>
+          <div class="field"><label for="setEasypaisaNumber">Easypaisa number</label><input type="text" id="setEasypaisaNumber" /></div>
+        </div>
+        <div class="field">
+          <label for="setPaymentQr">Payment QR code <span class="opt">(bank / wallet QR for receiving payments)</span></label>
+          <div class="row-inline">
+            <img id="setPaymentQrPreview" class="settings-preview" alt="" />
+            <input type="file" id="setPaymentQr" accept="image/*" />
+            <button class="btn btn-ghost btn-sm" id="btnPaymentQrRemove" type="button">Reset to default</button>
+          </div>
+        </div>
+        <div class="row-inline">
+          <button class="btn btn-primary" id="btnPaymentSave" type="button">Save payment details</button>
+          <span class="opt" id="paymentSavedMsg"></span>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top:16px;">
+        <button type="button" class="modal-row" id="btnOpenAbout">
+          <div>
+            <div class="modal-row-title">&#8505;&#65039; About Application</div>
+            <div class="modal-row-sub">Version, features &amp; developer info</div>
+          </div>
+          <span class="modal-row-chevron">&#8250;</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ===== DEVELOPER FOOTER (always visible) ===== -->
+    <div class="dev-panel">
+      <div class="dev-header">
+        <span class="dev-avatar">&#128119;&#8205;&#128187;</span>
+        <div class="dev-header-text">
+          <div class="dev-role">Developed by</div>
+          <div class="dev-name" id="devName">Waqar Ali — Digital Solutions</div>
+        </div>
+      </div>
+      <div class="dev-chips">
+        <a href="#" id="devWhatsappLink" class="dev-chip dev-chip-whatsapp" target="_blank" rel="noopener">&#128241; WhatsApp</a>
+        <a href="#" id="devEmailLink" class="dev-chip">&#9993; Email</a>
+      </div>
+      <div class="dev-meta">
+        <div class="dev-version">App Version : <span id="devVersion">2.0</span></div>
+        <div class="dev-copyright">&copy; 2026 Digital Solutions — All Rights Reserved</div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ===== BOTTOM NAV (mobile) ===== -->
+<nav class="bottom-nav" id="bottomNav" aria-label="Section navigation">
+  <button class="nav-item" data-view="dashboard" type="button"><span class="nav-icon">&#128202;</span><span class="nav-label">Dashboard</span></button>
+  <button class="nav-item is-active" data-view="builder" type="button"><span class="nav-icon">&#10133;</span><span class="nav-label">New</span></button>
+  <button class="nav-item" data-view="invoices" type="button"><span class="nav-icon">&#128203;</span><span class="nav-label">Invoices</span></button>
+  <button class="nav-item" data-view="customers" type="button"><span class="nav-icon">&#128100;</span><span class="nav-label">Customers</span></button>
+  <button class="nav-item" data-view="services" type="button"><span class="nav-icon">&#128230;</span><span class="nav-label">Services</span></button>
+  <button class="nav-item" data-view="vouchers" type="button"><span class="nav-icon">&#128179;</span><span class="nav-label">Cash</span></button>
+  <button class="nav-item" data-view="ledger" type="button"><span class="nav-icon">&#128213;</span><span class="nav-label">Ledger</span></button>
+  <button class="nav-item" data-view="reports" type="button"><span class="nav-icon">&#128200;</span><span class="nav-label">Reports</span></button>
+  <button class="nav-item" data-view="settings" type="button"><span class="nav-icon">&#9881;&#65039;</span><span class="nav-label">Settings</span></button>
+</nav>
+
+<!-- ===== ABOUT MODAL ===== -->
+<div class="modal-overlay" id="aboutModal" hidden>
+  <div class="modal-card about-card">
+    <div class="modal-head">
+      <h2>&#8505;&#65039; About Application</h2>
+      <button type="button" class="modal-close" id="btnCloseAbout">&#10005;</button>
+    </div>
+    <div class="about-body">
+      <div class="about-hero">
+        <div class="about-app-name">Digital Solutions Invoicing</div>
+        <div class="about-app-version">Version: <span id="aboutVersion">2.0</span></div>
+      </div>
+      <p class="about-lead">A modern, easy-to-use invoicing and account-management app built for Digital Solutions — create invoices, track customers and payments, and keep a running ledger, all from your phone or computer.</p>
+      <hr class="about-divider">
+      <h3 class="about-heading">Key Features</h3>
+      <ul class="about-list">
+        <li>Dashboard with sales &amp; outstanding balance overview</li>
+        <li>Professional invoices with logo, QR payment &amp; Easypaisa details</li>
+        <li>Customer &amp; service records with auto-fill</li>
+        <li>Payment status tracking (Paid / Unpaid / Partial)</li>
+        <li>Cash Receipt &amp; Cash Payment vouchers</li>
+        <li>Customer Ledger (running account statement)</li>
+        <li>Daily / weekly / monthly reports</li>
+        <li>A4, A5 &amp; thermal receipt print formats</li>
+        <li>Print, PDF download &amp; WhatsApp share</li>
+        <li>Installable app, works offline (PWA)</li>
+      </ul>
+      <hr class="about-divider">
+      <h3 class="about-heading">Developed By</h3>
+      <p class="about-text">
+        <strong>Waqar Ali</strong><br>
+        Founder &amp; Developer<br>
+        Digital Solutions
+      </p>
+      <hr class="about-divider">
+      <h3 class="about-heading">Contact Information</h3>
+      <p class="about-text">&#128241; WhatsApp: <a class="about-link" id="aboutWhatsappLink" href="#" target="_blank" rel="noopener">—</a></p>
+      <p class="about-text">&#9993; Email: <a class="about-link" id="aboutEmailLink" href="#">—</a></p>
+      <p class="about-text">For technical support, feature requests, bug reports, or business inquiries, please get in touch through WhatsApp.</p>
+      <hr class="about-divider">
+      <h3 class="about-heading">Copyright</h3>
+      <p class="about-text">&copy; 2026 Digital Solutions<br>All Rights Reserved.</p>
+      <p class="about-text">This application, including its design, source code, and documentation, is protected by copyright. Unauthorized copying, modification, or resale without written permission is prohibited.</p>
+      <hr class="about-divider">
+      <h3 class="about-heading">Disclaimer</h3>
+      <p class="about-text">All data is stored locally in your browser. Please export important invoices and back up regularly — the developer is not responsible for data loss due to clearing browser storage.</p>
+      <hr class="about-divider">
+      <h3 class="about-heading">Thank You</h3>
+      <p class="about-text">Thank you for using Digital Solutions Invoicing. We are committed to continuously improving the app and adding new features.</p>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
