@@ -1128,14 +1128,34 @@
   /* ================= SHARE / EXPORT ================= */
   function printInvoice() {
     const fmt = settings().invoiceFormat || "a4";
-    const pageRule = fmt === "a5" ? "size: A5; margin: 10mm;"
-      : fmt === "thermal" ? "size: 80mm auto; margin: 4mm;"
-      : "size: A4; margin: 12mm;";
+    const marginMm = fmt === "thermal" ? 4 : 10;
+    const pageRule = fmt === "a5" ? `size: A5; margin: ${marginMm}mm;`
+      : fmt === "thermal" ? `size: 80mm auto; margin: ${marginMm}mm;`
+      : `size: A4; margin: ${marginMm}mm;`;
     const style = document.createElement("style");
     style.textContent = `@page{ ${pageRule} }`;
     document.head.appendChild(style);
+
+    const sheet = $("invoiceSheet");
+    let zoomed = false;
+    if (fmt !== "thermal" && sheet) {
+      const pageHeightMm = fmt === "a5" ? 210 : 297;
+      const usablePx = (pageHeightMm - marginMm * 2) * 96 / 25.4;
+      const contentHeight = sheet.scrollHeight;
+      if (contentHeight > usablePx) {
+        sheet.style.zoom = String(Math.max(0.5, (usablePx / contentHeight) * 0.97));
+        zoomed = true;
+      }
+    }
+
+    const cleanup = () => {
+      style.remove();
+      if (zoomed) sheet.style.zoom = "";
+      window.removeEventListener("afterprint", cleanup);
+    };
+    window.addEventListener("afterprint", cleanup);
     window.print();
-    setTimeout(() => style.remove(), 500);
+    setTimeout(cleanup, 3000);
   }
 
   async function downloadPdfBlob() {
