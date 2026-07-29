@@ -15,6 +15,7 @@
 <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+<script>(function(){try{var t=localStorage.getItem("ds_theme");if(t&&t!=="classic")document.body.classList.add("theme-"+t);}catch(e){}})();</script>
 
 <!-- ===== STARTUP SPLASH (Bismillah) ===== -->
 <div id="splashScreen" class="splash-overlay">
@@ -88,6 +89,12 @@
 
     <!-- ===== DASHBOARD ===== -->
     <section id="dashboardView" class="view" hidden>
+      <div class="clock-card">
+        <div class="clock-day" id="clockDay">—</div>
+        <div class="clock-date" id="clockDate">—</div>
+        <div class="clock-time" id="clockTime">—</div>
+      </div>
+
       <div class="stat-grid">
         <div class="stat-card">
           <span class="stat-label">Today's sales</span>
@@ -536,6 +543,29 @@
           On iPhone/Safari: tap the Share icon and choose <strong>"Add to Home Screen"</strong>.
         </p>
         <p class="opt" id="installedMsg" hidden>&#9989; This app is already installed on this device.</p>
+      </div>
+
+      <div class="panel form-panel" style="margin-top:16px;">
+        <h2 class="panel-title">Appearance</h2>
+        <p class="opt" style="margin:-4px 0 12px;">Tap a theme to preview &amp; apply it instantly.</p>
+        <div class="theme-grid" id="themeGrid">
+          <button type="button" class="theme-card" data-theme="classic">
+            <span class="theme-swatch theme-swatch-classic"><span class="theme-check">&#10003;</span></span>
+            <span class="theme-name">Classic Navy</span>
+          </button>
+          <button type="button" class="theme-card" data-theme="ocean">
+            <span class="theme-swatch theme-swatch-ocean"><span class="theme-check">&#10003;</span></span>
+            <span class="theme-name">Ocean Blue</span>
+          </button>
+          <button type="button" class="theme-card" data-theme="emerald">
+            <span class="theme-swatch theme-swatch-emerald"><span class="theme-check">&#10003;</span></span>
+            <span class="theme-name">Emerald</span>
+          </button>
+          <button type="button" class="theme-card" data-theme="dark">
+            <span class="theme-swatch theme-swatch-dark"><span class="theme-check">&#10003;</span></span>
+            <span class="theme-name">Midnight Dark</span>
+          </button>
+        </div>
       </div>
 
       <div class="panel form-panel" style="margin-top:16px;">

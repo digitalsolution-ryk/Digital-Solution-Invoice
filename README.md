@@ -4,7 +4,10 @@
 A free, static invoicing web app for **Digital Solutions** (By Pass Road, Rahim Yar Khan). Runs entirely in the browser — no server, no database, no cost. Built with plain HTML, CSS and JavaScript so it can be hosted for free on GitHub Pages.
 
 ## Features
-- **Startup splash screen** — opens with Bismillah, then the Digital Solutions logo and brand, before landing on the app
+- **4 color themes** — Classic Navy, Ocean Blue, Emerald, and Midnight Dark, switchable instantly from Settings → Appearance
+- **Startup splash screen** — opens with Bismillah, then the Digital Solutions logo and brand, before landing on the Dashboard
+- **Dashboard opens by default** on startup, with a live clock showing the day, date and time
+- Saving an invoice automatically clears the form and generates the next invoice number, ready for the next customer
 - Real Digital Solutions logo and tagline shown on every invoice and in the sidebar — editable anytime from Settings
 - **Dashboard**: today's sales, total invoices, this month's revenue, outstanding balance, recent invoices
 - **Customers**: save customers once; pick them from a dropdown on any invoice to auto-fill their details; new customers used on an invoice are saved automatically; optional opening balance for customers who already owed money before you started using the app

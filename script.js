@@ -409,10 +409,10 @@
     }
     saveInvoicesList(list);
     upsertCustomerFromInvoice(data.customer);
-    editingId = data.id;
     toast("Invoice saved");
     populateCustomerSelect();
     renderCustomers();
+    resetForm();
   }
 
   function loadInvoiceIntoForm(inv) {
@@ -484,7 +484,24 @@
   }
 
   /* ================= DASHBOARD ================= */
+  function updateClock() {
+    const dayEl = $("clockDay"), dateEl = $("clockDate"), timeEl = $("clockTime");
+    if (!dayEl) return;
+    const now = new Date();
+    const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+    const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+    dayEl.textContent = days[now.getDay()];
+    dateEl.textContent = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+    let h = now.getHours();
+    const ampm = h >= 12 ? "PM" : "AM";
+    h = h % 12 || 12;
+    const mm = String(now.getMinutes()).padStart(2, "0");
+    const ss = String(now.getSeconds()).padStart(2, "0");
+    timeEl.textContent = `${String(h).padStart(2, "0")}:${mm}:${ss} ${ampm}`;
+  }
+
   function renderDashboard() {
+    updateClock();
     const list = loadInvoices();
     const today = todayISO();
     const now = new Date();
@@ -993,6 +1010,32 @@
     applyDeveloperInfo(s);
   }
 
+  /* ================= THEME ================= */
+  const LS_THEME = "ds_theme";
+  const VALID_THEMES = ["classic", "ocean", "emerald", "dark"];
+
+  function applyTheme(name) {
+    const t = VALID_THEMES.includes(name) ? name : "classic";
+    VALID_THEMES.forEach(v => document.body.classList.toggle("theme-" + v, v === t && v !== "classic"));
+    document.querySelectorAll(".theme-card").forEach(card => {
+      card.classList.toggle("is-selected", card.dataset.theme === t);
+    });
+  }
+
+  function onThemeChange(name) {
+    applyTheme(name);
+    try { localStorage.setItem(LS_THEME, name); } catch (e) { /* no-op */ }
+  }
+
+  function initTheme() {
+    let saved = "classic";
+    try { saved = localStorage.getItem(LS_THEME) || "classic"; } catch (e) { /* no-op */ }
+    applyTheme(saved);
+    document.querySelectorAll(".theme-card").forEach(card => {
+      card.addEventListener("click", () => onThemeChange(card.dataset.theme));
+    });
+  }
+
   function applyDeveloperInfo(s) {
     const waLink = `https://wa.me/${digitsOnly(s.whatsapp)}`;
     const mailLink = `mailto:${s.email}`;
@@ -1290,6 +1333,7 @@
     resetForm();
     resetVoucherForm();
     initInstallPrompt();
+    initTheme();
 
     $("svcBody").addEventListener("input", (e) => {
       const tr = e.target.closest("tr");
@@ -1414,8 +1458,10 @@
     $("aboutModal").addEventListener("click", (e) => { if (e.target.id === "aboutModal") closeAbout(); });
 
     recalc();
-    showView("builder");
+    showView("dashboard");
     hideSplash();
+    updateClock();
+    setInterval(updateClock, 1000);
   }
 
   function hideSplash() {
@@ -1424,7 +1470,7 @@
     setTimeout(() => {
       splash.classList.add("splash-hide");
       setTimeout(() => { splash.style.display = "none"; }, 600);
-    }, 2000);
+    }, 4000);
   }
 
   document.addEventListener("DOMContentLoaded", init);

@@ -29,6 +29,32 @@
   --shadow-md: 0 8px 24px rgba(27,33,48,.10);
 }
 
+/* ================= THEMES ================= */
+body.theme-ocean{
+  --navy: #0F3556; --navy-2: #164873; --orange: #2EA8E0; --orange-ink: #14587c;
+  --bg: #EFF6FB; --line-dark: #1F4A6B;
+}
+body.theme-emerald{
+  --navy: #0F3B2E; --navy-2: #17513F; --orange: #E8B84B; --orange-ink: #8a6112;
+  --bg: #EFF8F3; --line-dark: #1c5040;
+}
+body.theme-dark{
+  --navy: #0B0F17; --navy-2: #161C28; --orange: #F5A623; --orange-ink: #c9860f;
+  --bg: #12151C; --surface: #1A1F2B; --ink: #E8EAED; --ink-soft: #A8AFBC;
+  --line: #2B3242; --line-dark: #2B3242; --muted: #7A8394;
+}
+body.theme-dark .stat-card,
+body.theme-dark .panel,
+body.theme-dark .invoice-sheet,
+body.theme-dark .history-item,
+body.theme-dark .modal-card,
+body.theme-dark .dev-panel{ background: var(--surface); }
+body.theme-dark input[type=text], body.theme-dark input[type=tel], body.theme-dark input[type=email],
+body.theme-dark input[type=date], body.theme-dark input[type=number], body.theme-dark textarea, body.theme-dark .field select{
+  background:#141924; color: var(--ink); border-color: var(--line);
+}
+body.theme-dark .rail-hamburger span{ background:#E8EAED; }
+
 *{ box-sizing: border-box; }
 html,body{ height:100%; }
 body{
@@ -100,7 +126,7 @@ input, select, textarea{ font-family: var(--font-body); }
 .splash-progress-bar{
   height:100%; width:0%; border-radius:3px;
   background: linear-gradient(90deg, var(--orange), #ffcf7a);
-  animation: splashFill 1.6s ease 1.25s forwards;
+  animation: splashFill 3.2s ease 1.25s forwards;
 }
 @keyframes splashFill{ from{ width:0%; } to{ width:100%; } }
 .splash-version{
@@ -450,6 +476,23 @@ textarea{ resize: vertical; min-height: 64px; }
 .toast.show{ opacity:1; transform: translateX(-50%) translateY(0); }
 
 /* ================= DASHBOARD ================= */
+.clock-card{
+  background: var(--navy);
+  border-radius: var(--radius-lg);
+  padding: 20px 22px;
+  margin-bottom: 16px;
+  text-align:center;
+  box-shadow: var(--shadow-sm);
+}
+.clock-day{
+  font-family: var(--font-display); font-weight:700; font-size:15px;
+  color: var(--orange); letter-spacing:.04em; text-transform:uppercase;
+}
+.clock-date{ font-size:13px; color:#C7CBD6; margin-top:4px; }
+.clock-time{
+  font-family: var(--font-mono); font-weight:600; font-size:26px;
+  color:#fff; margin-top:6px; letter-spacing:.02em;
+}
 .stat-grid{
   display:grid;
   grid-template-columns: repeat(4, 1fr);
@@ -632,6 +675,34 @@ textarea{ resize: vertical; min-height: 64px; }
   margin-top:12px; padding-top:10px; border-top:1px dashed var(--line);
   font-size:11px; color: var(--muted);
 }
+
+/* ================= THEME PICKER ================= */
+.theme-grid{ display:grid; grid-template-columns: repeat(4, 1fr); gap:10px; }
+.theme-card{
+  display:flex; flex-direction:column; align-items:center; gap:6px;
+  background:#fff; border:2px solid var(--line); border-radius:12px;
+  padding:8px 6px; cursor:pointer; font-family: var(--font-body);
+  transition: border-color .15s ease, transform .12s ease;
+}
+.theme-card:active{ transform: scale(.96); }
+.theme-swatch{
+  width:100%; height:36px; border-radius:8px; position:relative;
+  box-shadow: 0 2px 6px rgba(0,0,0,.15);
+}
+.theme-swatch-classic{ background: linear-gradient(135deg, #1B2130 0%, #F5A623 100%); }
+.theme-swatch-ocean{ background: linear-gradient(135deg, #0F3556 0%, #2EA8E0 100%); }
+.theme-swatch-emerald{ background: linear-gradient(135deg, #0F3B2E 0%, #E8B84B 100%); }
+.theme-swatch-dark{ background: linear-gradient(135deg, #0B0F17 0%, #F5A623 100%); }
+.theme-check{
+  position:absolute; top:4px; right:4px; width:16px; height:16px; border-radius:50%;
+  background:rgba(255,255,255,.9); color:#16A34A; font-size:10px; font-weight:800;
+  display:flex; align-items:center; justify-content:center; opacity:0; transform:scale(.6);
+  transition: opacity .15s ease, transform .15s ease;
+}
+.theme-name{ font-size:10.5px; font-weight:600; color: var(--muted); text-align:center; }
+.theme-card.is-selected{ border-color: var(--orange); box-shadow: 0 0 0 3px rgba(245,166,35,.15); }
+.theme-card.is-selected .theme-check{ opacity:1; transform:scale(1); }
+.theme-card.is-selected .theme-name{ color: var(--ink); font-weight:700; }
 
 /* ================= SETTINGS "ABOUT" ROW ================= */
 .modal-row{
