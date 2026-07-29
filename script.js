@@ -1093,6 +1093,75 @@
     toast("Payment details saved");
   }
 
+  /* ================= BACKUP & RESTORE ================= */
+  const LS_LAST_BACKUP = "ds_last_backup_at";
+  const BACKUP_KEYS = [
+    "ds_invoices", "ds_invoice_counter", "ds_customers", "ds_services",
+    "ds_settings", "ds_vouchers", "ds_crv_counter", "ds_cpv_counter", "ds_theme",
+  ];
+
+  function showLastBackupInfo() {
+    const el = $("backupLastInfo");
+    if (!el) return;
+    const ts = localStorage.getItem(LS_LAST_BACKUP);
+    el.textContent = ts
+      ? `Last backup/restore: ${formatDisplayDate(ts.slice(0, 10))} at ${new Date(ts).toLocaleTimeString()}`
+      : "No backup taken yet on this device.";
+  }
+
+  function downloadBackup() {
+    const data = {};
+    BACKUP_KEYS.forEach(k => {
+      const v = localStorage.getItem(k);
+      if (v !== null) data[k] = v;
+    });
+    const payload = {
+      app: "Digital Solutions Invoicing",
+      version: APP_VERSION,
+      exportedAt: new Date().toISOString(),
+      data,
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    const stamp = todayISO();
+    a.href = url;
+    a.download = `digital-solutions-backup-${stamp}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    localStorage.setItem(LS_LAST_BACKUP, new Date().toISOString());
+    showLastBackupInfo();
+    toast("Backup downloaded — save it somewhere safe");
+  }
+
+  function restoreBackup(file) {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      let parsed;
+      try { parsed = JSON.parse(reader.result); }
+      catch { toast("That file isn't a valid backup"); return; }
+
+      const data = parsed && parsed.data;
+      if (!data || typeof data !== "object") { toast("That file isn't a valid backup"); return; }
+
+      const ok = confirm(
+        "Restoring will replace all invoices, customers, services, vouchers and settings currently on this device with the data from this backup. This cannot be undone. Continue?"
+      );
+      if (!ok) return;
+
+      BACKUP_KEYS.forEach(k => {
+        if (data[k] !== undefined) localStorage.setItem(k, data[k]);
+      });
+      localStorage.setItem(LS_LAST_BACKUP, new Date().toISOString());
+      toast("Backup restored — reloading…");
+      setTimeout(() => location.reload(), 800);
+    };
+    reader.readAsText(file);
+  }
+
   function applyBrandingSafe() {
     try { applyBranding(); } catch (e) { /* no-op */ }
   }
@@ -1476,6 +1545,11 @@
     $("btnOpenAbout").addEventListener("click", openAbout);
     $("btnCloseAbout").addEventListener("click", closeAbout);
     $("aboutModal").addEventListener("click", (e) => { if (e.target.id === "aboutModal") closeAbout(); });
+
+    $("btnBackupDownload").addEventListener("click", downloadBackup);
+    $("btnBackupRestore").addEventListener("click", () => $("backupFileInput").click());
+    $("backupFileInput").addEventListener("change", (e) => restoreBackup(e.target.files[0]));
+    showLastBackupInfo();
 
     recalc();
     showView("dashboard");

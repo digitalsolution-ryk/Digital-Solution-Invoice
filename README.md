@@ -4,6 +4,7 @@
 A free, static invoicing web app for **Digital Solutions** (By Pass Road, Rahim Yar Khan). Runs entirely in the browser — no server, no database, no cost. Built with plain HTML, CSS and JavaScript so it can be hosted for free on GitHub Pages.
 
 ## Features
+- **Backup & Restore**: download all your data (invoices, customers, services, vouchers, settings) as a single JSON file from Settings — save it to Google Drive, WhatsApp, email, or a USB drive — and restore it on any device or after clearing browser data
 - **4 color themes** — Classic Navy, Ocean Blue, Emerald, and Midnight Dark, switchable instantly from Settings → Appearance
 - **Startup splash screen** — opens with Bismillah, then the Digital Solutions logo and brand, before landing on the Dashboard
 - **Dashboard opens by default** on startup, with a live clock showing the day, date and time
@@ -63,8 +64,8 @@ npx serve .
 
 ## Notes on data
 - Invoices, customers, services and settings are all stored in the browser's `localStorage`, on the device you use. They are **not** synced between devices or browsers.
-- Clearing browser data / site data will erase everything, so export important invoices to PDF as a backup.
-- The invoice number counter, history, customers and services all live in the same browser storage — using a different browser or device starts fresh.
+- Clearing browser data / site data will erase everything, so use **Settings → Backup & Restore** to download a backup regularly and save it somewhere safe (Google Drive, WhatsApp, email).
+- The invoice number counter, history, customers and services all live in the same browser storage — using a different browser or device starts fresh unless you restore a backup there.
 - The WhatsApp share button uses the Web Share API where supported (attaches the PDF directly); otherwise it opens a WhatsApp chat with a text summary of the invoice.
 
 ## Customizing

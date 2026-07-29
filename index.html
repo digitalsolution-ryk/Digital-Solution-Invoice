@@ -629,6 +629,21 @@
         </div>
       </div>
 
+      <div class="panel form-panel" style="margin-top:16px;">
+        <h2 class="panel-title">Backup &amp; Restore</h2>
+        <p class="opt" style="margin:-6px 0 14px;">
+          All your data lives only in this browser. Download a backup file regularly and save it somewhere safe —
+          Google Drive, WhatsApp "Message yourself", email, or a USB drive all work. If this device is ever lost,
+          reset, or you switch phones, restore from that file to get everything back.
+        </p>
+        <div class="row-inline wrap">
+          <button class="btn btn-primary" id="btnBackupDownload" type="button">&#11015; Download backup</button>
+          <input type="file" id="backupFileInput" accept="application/json,.json" hidden />
+          <button class="btn btn-outline" id="btnBackupRestore" type="button">&#11014; Restore from backup</button>
+        </div>
+        <p class="opt" id="backupLastInfo" style="margin-top:10px;"></p>
+      </div>
+
       <div class="panel" style="margin-top:16px;">
         <button type="button" class="modal-row" id="btnOpenAbout">
           <div>
