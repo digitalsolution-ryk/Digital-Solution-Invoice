@@ -1,5 +1,5 @@
 # Digital Solutions — Invoicing
-**Version V-14**
+**Version V-16**
 
 A free, static invoicing web app for **Digital Solutions** (By Pass Road, Rahim Yar Khan). Runs entirely in the browser — no server, no database, no cost. Built with plain HTML, CSS and JavaScript so it can be hosted for free on GitHub Pages.
 
@@ -23,6 +23,7 @@ A free, static invoicing web app for **Digital Solutions** (By Pass Road, Rahim 
 - Add / edit / delete service line items, with rate × quantity = total
 - Automatic subtotal, discount (percentage or flat), and grand total
 - **Payment QR + Easypaisa details** on every invoice, so customers can pay you directly by scanning the bank QR or sending to your Easypaisa account
+- **Signature block** on every invoice (signature image + underline + printed name), editable from Settings
 - Live invoice preview as you type
 - **Invoice paper size**: choose A4, A5, or an 80mm thermal receipt format in Settings — print, PDF and WhatsApp share all use the selected size, so the layout is never squeezed or oddly wrapped
 - Print invoice, download as PDF, or **share directly to WhatsApp** (uses the native share sheet on supported phones, falls back to a WhatsApp link)
@@ -76,6 +77,8 @@ npx serve .
 - Brand colors are defined as CSS variables at the top of `style.css` (`--navy`, `--orange`, etc.) if you want to change the look and feel.
 
 ## Version History
+- **V-16** — Added a signature block to every invoice (signature image, underline, and printed name) next to the payment section; Settings → Signature lets you update the signature image and the printed name any time
+- **V-15** — Invoice item table: S.No, Description, Unit Price and Amount are now center-aligned, and the Unit Price/Amount columns are wide enough that amounts always stay on one line (no more "Rs." wrapping onto its own line)
 - **V-14** — Updated brand logo (premium metallic Digital Solutions badge) applied everywhere: sidebar, invoices, ledger, reports, trial balance, splash screen, favicon, and app icons
 - **V-13** — Trial Balance report; consistent branded header (logo, business name/address, report name, boxed date range) across Ledger, Reports and Trial Balance
 - **V-12** — Backup & Restore, 4 color themes, Bismillah splash screen, bottom navigation, About/developer info, dashboard-first startup with live clock, one-page print fix

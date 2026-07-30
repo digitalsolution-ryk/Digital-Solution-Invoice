@@ -350,18 +350,22 @@ textarea{ resize: vertical; min-height: 64px; }
 .invoice-sheet.fmt-thermal .sheet-invoiceblock{ align-items:flex-start; text-align:left; }
 .invoice-sheet.fmt-thermal .sheet-totals-block{ width:100%; }
 .invoice-sheet.fmt-thermal .sheet-payment{ flex-wrap:wrap; }
+.invoice-sheet.fmt-thermal .sheet-bottom-row{ flex-direction:column; align-items:stretch; }
+.invoice-sheet.fmt-thermal .sheet-signature-block{ align-items:flex-end; padding-top:6px; }
 .invoice-sheet.fmt-thermal .sheet-logo{ width:36px; height:36px; }
 .invoice-sheet.fmt-thermal .sheet-brand-name{ font-size:13px; }
 .invoice-sheet.fmt-thermal .sheet-table th.sno,
-.invoice-sheet.fmt-thermal .sheet-table td.sno{ width:18px; }
+.invoice-sheet.fmt-thermal .sheet-table td.sno{ width:16px; }
 .invoice-sheet.fmt-thermal .sheet-table th:nth-child(3),
-.invoice-sheet.fmt-thermal .sheet-table td:nth-child(3){ width:28px; }
+.invoice-sheet.fmt-thermal .sheet-table td:nth-child(3){ width:24px; }
 .invoice-sheet.fmt-thermal .sheet-table th:nth-child(4),
-.invoice-sheet.fmt-thermal .sheet-table td:nth-child(4){ width:54px; }
+.invoice-sheet.fmt-thermal .sheet-table td:nth-child(4){ width:62px; }
 .invoice-sheet.fmt-thermal .sheet-table th:nth-child(5),
-.invoice-sheet.fmt-thermal .sheet-table td:nth-child(5){ width:60px; }
+.invoice-sheet.fmt-thermal .sheet-table td:nth-child(5){ width:68px; }
 .invoice-sheet.fmt-thermal .sheet-table th,
-.invoice-sheet.fmt-thermal .sheet-table td{ padding: 5px 4px; font-size:10.5px; }
+.invoice-sheet.fmt-thermal .sheet-table td{ padding: 5px 3px; font-size:10px; }
+.invoice-sheet.fmt-thermal .sheet-table td:nth-child(4),
+.invoice-sheet.fmt-thermal .sheet-table td:nth-child(5){ white-space: nowrap; }
 
 /* ---- Top: company block + invoice block ---- */
 .sheet-top{ display:flex; justify-content:space-between; align-items:flex-start; gap:14px; padding-bottom:16px; border-bottom: 2px solid var(--navy); }
@@ -389,20 +393,21 @@ textarea{ resize: vertical; min-height: 64px; }
 /* ---- Items table ---- */
 .sheet-table{ width:100%; border-collapse: collapse; margin-bottom: 10px; table-layout: fixed; }
 .sheet-table th{
-  background: var(--navy); color:#fff; text-align:left; font-size:10.5px; text-transform:uppercase;
+  background: var(--navy); color:#fff; text-align:center; font-size:10.5px; text-transform:uppercase;
   letter-spacing:.04em; padding: 7px 8px; font-weight:600;
 }
-.sheet-table th.sno{ width:32px; }
-.sheet-table th:nth-child(3){ width:44px; }
-.sheet-table th:nth-child(4){ width:78px; }
-.sheet-table th:nth-child(5){ width:88px; }
-.sheet-table th:not(:first-child), .sheet-table td:not(:first-child){ text-align:right; }
+.sheet-table th.sno{ width:38px; }
+.sheet-table th:nth-child(3){ width:50px; }
+.sheet-table th:nth-child(4){ width:104px; }
+.sheet-table th:nth-child(5){ width:116px; }
+.sheet-table th, .sheet-table td{ text-align:center; }
 .sheet-table td{ padding: 7px 8px; border-bottom: 1px solid #F0F1F4; font-size:12.5px; vertical-align: top; }
-.sheet-table td.sno{ color: var(--muted); text-align:left; }
+.sheet-table td.sno{ color: var(--muted); }
 .sheet-table td:nth-child(2){
-  font-weight:500; text-align:left; padding-right:12px;
+  font-weight:500; padding-left:10px; padding-right:10px;
   word-break: break-word; overflow-wrap: break-word;
 }
+.sheet-table td:nth-child(4), .sheet-table td:nth-child(5){ white-space: nowrap; }
 
 /* ---- Totals ---- */
 .sheet-totals-block{ margin-left:auto; width: 62%; min-width:200px; margin-bottom: 6px; }
@@ -427,8 +432,19 @@ textarea{ resize: vertical; min-height: 64px; }
 .sheet-notes{ padding: 10px 2px; border-top: 1px dashed var(--line); }
 .sheet-notes p{ margin:4px 0 0; font-size:12px; color: var(--ink-soft); white-space:pre-wrap; }
 
-/* ---- Payment block ---- */
-.sheet-payment-block{ padding: 12px 2px 14px; border-top: 1px dashed var(--line); }
+/* ---- Payment block + Signature ---- */
+.sheet-bottom-row{
+  display:flex; justify-content:space-between; align-items:flex-end; gap:16px;
+  border-top: 1px dashed var(--line); padding-top: 4px;
+}
+.sheet-payment-block{ padding: 12px 2px 14px; flex:1 1 auto; min-width:0; }
+.sheet-signature-block{
+  flex-shrink:0; display:flex; flex-direction:column; align-items:center;
+  padding: 12px 4px 14px; text-align:center;
+}
+.signature-img{ height:52px; max-width:150px; object-fit:contain; }
+.signature-line{ width:140px; border-top:1px solid var(--ink-soft); margin-top:2px; }
+.signature-name{ font-size:11.5px; font-weight:700; color: var(--ink); margin-top:4px; white-space:nowrap; }
 
 /* ---- Footer ---- */
 .sheet-footer{

@@ -29,7 +29,7 @@
     <div class="splash-tagline">Invoicing &amp; Accounts</div>
     <div class="splash-progress"><div class="splash-progress-bar"></div></div>
   </div>
-  <div class="splash-version" id="splashVersion">V-14</div>
+  <div class="splash-version" id="splashVersion">V-16</div>
 </div>
 
 <datalist id="serviceNames"></datalist>
@@ -313,15 +313,23 @@
                 <p id="pvNotes"></p>
               </div>
 
-              <div class="sheet-payment-block">
-                <span class="meta-label">For online payment</span>
-                <div class="sheet-payment">
-                  <img id="pvPaymentQr" class="payment-qr-img" alt="Payment QR" />
-                  <div class="payment-details">
-                    <div class="payment-line"><strong>HBL</strong> — scan to pay</div>
-                    <div class="payment-line"><strong id="pvEasypaisaTitle">Waqar Ali</strong> (Easypaisa)</div>
-                    <div class="payment-line mono" id="pvEasypaisaNumber">0300-9630013</div>
+              <div class="sheet-bottom-row">
+                <div class="sheet-payment-block">
+                  <span class="meta-label">For online payment</span>
+                  <div class="sheet-payment">
+                    <img id="pvPaymentQr" class="payment-qr-img" alt="Payment QR" />
+                    <div class="payment-details">
+                      <div class="payment-line"><strong>HBL</strong> — scan to pay</div>
+                      <div class="payment-line"><strong id="pvEasypaisaTitle">Waqar Ali</strong> (Easypaisa)</div>
+                      <div class="payment-line mono" id="pvEasypaisaNumber">0300-9630013</div>
+                    </div>
                   </div>
+                </div>
+
+                <div class="sheet-signature-block">
+                  <img id="pvSignatureImg" class="signature-img" alt="Signature" />
+                  <div class="signature-line"></div>
+                  <div class="signature-name" id="pvSignatoryName">Waqar Ali</div>
                 </div>
               </div>
 
@@ -688,6 +696,27 @@
         <div class="row-inline">
           <button class="btn btn-primary" id="btnPaymentSave" type="button">Save payment details</button>
           <span class="opt" id="paymentSavedMsg"></span>
+        </div>
+      </div>
+
+      <div class="panel form-panel" style="margin-top:16px;">
+        <h2 class="panel-title">Signature</h2>
+        <p class="opt" style="margin:-6px 0 14px;">Shown at the bottom of every invoice, above the printed name.</p>
+        <div class="field">
+          <label for="setSignatoryName">Name printed under the signature</label>
+          <input type="text" id="setSignatoryName" placeholder="e.g. Waqar Ali" />
+        </div>
+        <div class="field">
+          <label for="setSignature">Signature image</label>
+          <div class="row-inline">
+            <img id="setSignaturePreview" class="settings-preview" alt="" />
+            <input type="file" id="setSignature" accept="image/*" />
+            <button class="btn btn-ghost btn-sm" id="btnSignatureRemove" type="button">Reset to default</button>
+          </div>
+        </div>
+        <div class="row-inline">
+          <button class="btn btn-primary" id="btnSignatureSave" type="button">Save signature</button>
+          <span class="opt" id="signatureSavedMsg"></span>
         </div>
       </div>
 
