@@ -1,5 +1,5 @@
 # Digital Solutions — Invoicing
-**Version V-13**
+**Version V-14**
 
 A free, static invoicing web app for **Digital Solutions** (By Pass Road, Rahim Yar Khan). Runs entirely in the browser — no server, no database, no cost. Built with plain HTML, CSS and JavaScript so it can be hosted for free on GitHub Pages.
 
@@ -76,6 +76,7 @@ npx serve .
 - Brand colors are defined as CSS variables at the top of `style.css` (`--navy`, `--orange`, etc.) if you want to change the look and feel.
 
 ## Version History
+- **V-14** — Updated brand logo (premium metallic Digital Solutions badge) applied everywhere: sidebar, invoices, ledger, reports, trial balance, splash screen, favicon, and app icons
 - **V-13** — Trial Balance report; consistent branded header (logo, business name/address, report name, boxed date range) across Ledger, Reports and Trial Balance
 - **V-12** — Backup & Restore, 4 color themes, Bismillah splash screen, bottom navigation, About/developer info, dashboard-first startup with live clock, one-page print fix
 
