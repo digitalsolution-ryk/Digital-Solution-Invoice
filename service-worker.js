@@ -1,11 +1,11 @@
 /* Digital Solutions Invoicing — Service Worker
-   Caches the app shell so the invoice builder keeps working offline.
-   PDF/print libraries are loaded from a CDN and require a connection
-   the first time; after that they're cached too. Logo, payment QR,
-   and app icons are embedded directly in script.js/manifest.json —
-   no separate image files are needed. */
+   Caches the app shell (including the real icon files under /icons)
+   so the invoice builder keeps working offline and Android/Chrome can
+   fetch the icons needed to install the app (WebAPK). PDF/print
+   libraries are loaded from a CDN and require a connection the first
+   time; after that they're cached too. */
 
-const CACHE_NAME = "ds-invoice-v2";
+const CACHE_NAME = "ds-invoice-v3";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -13,6 +13,9 @@ const APP_SHELL = [
   "./script.js",
   "./manifest.json",
   "./offline.html",
+  "./icons/icon-192.png",
+  "./icons/icon-512.png",
+  "./icons/maskable-icon.png",
 ];
 
 self.addEventListener("install", (event) => {
