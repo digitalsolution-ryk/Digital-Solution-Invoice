@@ -5,7 +5,7 @@
    libraries are loaded from a CDN and require a connection the first
    time; after that they're cached too. */
 
-const CACHE_NAME = "ds-invoice-v3";
+const CACHE_NAME = "ds-invoice-v4";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -13,9 +13,9 @@ const APP_SHELL = [
   "./script.js",
   "./manifest.json",
   "./offline.html",
-  "./icons/icon-192.png",
-  "./icons/icon-512.png",
-  "./icons/maskable-icon.png",
+  "./icon-192.png",
+  "./icon-512.png",
+  "./maskable-icon.png",
 ];
 
 self.addEventListener("install", (event) => {
