@@ -5,18 +5,21 @@
    libraries are loaded from a CDN and require a connection the first
    time; after that they're cached too. */
 
-const CACHE_NAME = "ds-invoice-v4";
+const CACHE_NAME = "ds-invoice-v5";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./style.css",
   "./script.js",
+  "./firebase-config.js",
+  "./sync.js",
   "./manifest.json",
   "./offline.html",
   "./icon-192.png",
   "./icon-512.png",
   "./maskable-icon.png",
 ];
+const NETWORK_FIRST = ["index.html", "script.js", "sync.js", "firebase-config.js"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -38,6 +41,25 @@ self.addEventListener("fetch", (event) => {
   const req = event.request;
   if (req.method !== "GET") return;
 
+  const isAppCode = NETWORK_FIRST.some((f) => req.url.endsWith(f)) || req.mode === "navigate";
+
+  if (isAppCode) {
+    event.respondWith(
+      fetch(req)
+        .then((res) => {
+          if (res && res.status === 200 && req.url.startsWith(self.location.origin)) {
+            const clone = res.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(req, clone));
+          }
+          return res;
+        })
+        .catch(() =>
+          caches.match(req).then((cached) => cached || (req.mode === "navigate" ? caches.match("./offline.html") : undefined))
+        )
+    );
+    return;
+  }
+
   event.respondWith(
     caches.match(req).then((cached) => {
       const network = fetch(req)
@@ -48,10 +70,7 @@ self.addEventListener("fetch", (event) => {
           }
           return res;
         })
-        .catch(() => {
-          if (req.mode === "navigate") return caches.match("./offline.html");
-          return cached;
-        });
+        .catch(() => cached);
       return cached || network;
     })
   );
