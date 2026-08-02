@@ -230,22 +230,63 @@
     addStatusBadge();
   }
 
-  // ---------- Bottom status line (always visible, one line) ----------
+  // ---------- Inject responsive positioning so we don't overlap the app's own bottom nav ----------
+  (function injectSyncStyles() {
+    if (document.getElementById("syncPositionStyles")) return;
+    const style = document.createElement("style");
+    style.id = "syncPositionStyles";
+    style.textContent = `
+      #syncStatusLine{ position:fixed; left:8px; right:8px; bottom:8px; border-radius:10px; z-index:9997; }
+      #adminPanelBtn{ position:fixed; right:12px; bottom:56px; z-index:9997; }
+      @media (max-width: 760px){
+        #syncStatusLine{ bottom:96px !important; }
+        #adminPanelBtn{ bottom:150px !important; }
+      }
+    `;
+    document.head.appendChild(style);
+  })();
+
+  // ---------- Bottom status line (always visible, one line, with direct Logout) ----------
   let lastStatusText = "Synced ✓";
   function setStatus(text) {
     lastStatusText = text;
-    const line = document.getElementById("syncStatusLine");
-    if (line && !line.dataset.expanded) line.textContent = statusLineText(text);
+    renderStatusLine();
   }
 
-  function statusLineText(status) {
+  function renderStatusLine() {
+    const line = document.getElementById("syncStatusLine");
+    if (!line) return;
     const u = auth.currentUser;
-    if (!u) return "";
+    line.innerHTML = "";
+    if (!u) return;
+
+    const info = document.createElement("span");
     if (isImpersonating()) {
       const targetEmail = sessionStorage.getItem(SS_ADMIN_TARGET_EMAIL) || "user";
-      return "🔧 Admin mode: viewing " + targetEmail + " — " + status;
+      info.textContent = "🔧 Admin mode: viewing " + targetEmail + " — " + lastStatusText;
+    } else {
+      info.textContent = u.email + (myRole === "admin" ? " (admin)" : "") + " — " + lastStatusText;
     }
-    return u.email + (myRole === "admin" ? " (admin)" : "") + " — " + status;
+    line.appendChild(info);
+
+    if (isImpersonating()) {
+      const backBtn = document.createElement("span");
+      backBtn.textContent = "↩ Return to my account";
+      backBtn.style.cssText = "margin-left:10px;color:#4c7dff;font-weight:600;cursor:pointer;";
+      backBtn.onclick = (ev) => { ev.stopPropagation(); returnToOwnAccount(); };
+      line.appendChild(backBtn);
+    }
+
+    const logoutBtn = document.createElement("span");
+    logoutBtn.textContent = "Logout";
+    logoutBtn.style.cssText = "margin-left:10px;color:#ff6b6b;font-weight:700;cursor:pointer;";
+    logoutBtn.onclick = (ev) => {
+      ev.stopPropagation();
+      sessionStorage.removeItem(SS_ADMIN_TARGET_UID);
+      sessionStorage.removeItem(SS_ADMIN_TARGET_EMAIL);
+      auth.signOut().then(() => location.reload());
+    };
+    line.appendChild(logoutBtn);
   }
 
   function addStatusBadge() {
@@ -254,36 +295,11 @@
       line = document.createElement("div");
       line.id = "syncStatusLine";
       line.style.cssText =
-        "position:fixed;bottom:0;left:0;right:0;background:#12141c;color:#9aa1b5;font-size:11px;padding:5px 10px;z-index:9998;font-family:Inter,sans-serif;text-align:center;cursor:pointer;border-top:1px solid #262b3a;";
+        "background:#12141c;color:#9aa1b5;font-size:11px;padding:7px 12px;font-family:Inter,sans-serif;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.35);";
       document.body.appendChild(line);
     }
-    line.textContent = statusLineText(lastStatusText);
-    line.onclick = () => openAccountMenu(line);
-
+    renderStatusLine();
     if (myRole === "admin") addAdminButton();
-  }
-
-  function openAccountMenu(line) {
-    if (line.dataset.expanded) {
-      line.dataset.expanded = "";
-      line.textContent = statusLineText(lastStatusText);
-      line.onclick = () => openAccountMenu(line);
-      return;
-    }
-    line.dataset.expanded = "1";
-    line.innerHTML = "";
-    const actions = [];
-    if (isImpersonating()) {
-      actions.push({ label: "↩ Return to my own account", action: returnToOwnAccount });
-    }
-    actions.push({ label: "Sign out", action: () => auth.signOut().then(() => location.reload()) });
-    actions.forEach((a) => {
-      const span = document.createElement("span");
-      span.textContent = a.label;
-      span.style.cssText = "margin:0 10px;color:#4c7dff;font-weight:600;";
-      span.onclick = (ev) => { ev.stopPropagation(); a.action(); };
-      line.appendChild(span);
-    });
   }
 
   function returnToOwnAccount() {
