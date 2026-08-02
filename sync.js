@@ -230,23 +230,25 @@
     addStatusBadge();
   }
 
-  // ---------- Inject responsive positioning so we don't overlap the app's own bottom nav ----------
+  // ---------- Inject styles for the in-header status line ----------
   (function injectSyncStyles() {
     if (document.getElementById("syncPositionStyles")) return;
     const style = document.createElement("style");
     style.id = "syncPositionStyles";
     style.textContent = `
-      #syncStatusLine{ position:fixed; left:8px; right:8px; bottom:8px; border-radius:10px; z-index:9997; }
-      #adminPanelBtn{ position:fixed; right:12px; bottom:56px; z-index:9997; }
-      @media (max-width: 760px){
-        #syncStatusLine{ bottom:96px !important; }
-        #adminPanelBtn{ bottom:150px !important; }
+      #syncStatusLine{
+        font-family:Inter,sans-serif; font-size:11px; color:#c7cbd6;
+        background:rgba(255,255,255,.06); border-radius:8px;
+        padding:6px 9px; margin-top:10px; line-height:1.5;
       }
+      #syncStatusLine .syncAction{ color:#f5a623; font-weight:700; cursor:pointer; margin-right:10px; white-space:nowrap; }
+      #syncStatusLine .syncAction:last-child{ margin-right:0; }
+      @media (max-width:760px){ #syncStatusLine{ margin-top:8px; } }
     `;
     document.head.appendChild(style);
   })();
 
-  // ---------- Bottom status line (always visible, one line, with direct Logout) ----------
+  // ---------- Status line — lives inside the app's own header/sidebar (no overlap with bottom nav) ----------
   let lastStatusText = "Synced ✓";
   function setStatus(text) {
     lastStatusText = text;
@@ -260,33 +262,47 @@
     line.innerHTML = "";
     if (!u) return;
 
-    const info = document.createElement("span");
+    const info = document.createElement("div");
     if (isImpersonating()) {
       const targetEmail = sessionStorage.getItem(SS_ADMIN_TARGET_EMAIL) || "user";
-      info.textContent = "🔧 Admin mode: viewing " + targetEmail + " — " + lastStatusText;
+      info.textContent = "🔧 Viewing: " + targetEmail + " — " + lastStatusText;
     } else {
       info.textContent = u.email + (myRole === "admin" ? " (admin)" : "") + " — " + lastStatusText;
     }
+    info.style.marginBottom = "4px";
+    info.style.wordBreak = "break-all";
     line.appendChild(info);
+
+    const actionsRow = document.createElement("div");
 
     if (isImpersonating()) {
       const backBtn = document.createElement("span");
+      backBtn.className = "syncAction";
       backBtn.textContent = "↩ Return to my account";
-      backBtn.style.cssText = "margin-left:10px;color:#4c7dff;font-weight:600;cursor:pointer;";
-      backBtn.onclick = (ev) => { ev.stopPropagation(); returnToOwnAccount(); };
-      line.appendChild(backBtn);
+      backBtn.onclick = () => returnToOwnAccount();
+      actionsRow.appendChild(backBtn);
+    }
+
+    if (myRole === "admin" && !isImpersonating()) {
+      const adminBtn = document.createElement("span");
+      adminBtn.className = "syncAction";
+      adminBtn.textContent = "🛠 Admin Panel";
+      adminBtn.onclick = () => showAdminPanel();
+      actionsRow.appendChild(adminBtn);
     }
 
     const logoutBtn = document.createElement("span");
+    logoutBtn.className = "syncAction";
+    logoutBtn.style.color = "#ff6b6b";
     logoutBtn.textContent = "Logout";
-    logoutBtn.style.cssText = "margin-left:10px;color:#ff6b6b;font-weight:700;cursor:pointer;";
-    logoutBtn.onclick = (ev) => {
-      ev.stopPropagation();
+    logoutBtn.onclick = () => {
       sessionStorage.removeItem(SS_ADMIN_TARGET_UID);
       sessionStorage.removeItem(SS_ADMIN_TARGET_EMAIL);
       auth.signOut().then(() => location.reload());
     };
-    line.appendChild(logoutBtn);
+    actionsRow.appendChild(logoutBtn);
+
+    line.appendChild(actionsRow);
   }
 
   function addStatusBadge() {
@@ -294,12 +310,11 @@
     if (!line) {
       line = document.createElement("div");
       line.id = "syncStatusLine";
-      line.style.cssText =
-        "background:#12141c;color:#9aa1b5;font-size:11px;padding:7px 12px;font-family:Inter,sans-serif;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.35);";
-      document.body.appendChild(line);
+      const rail = document.querySelector(".rail");
+      if (rail) rail.appendChild(line);
+      else document.body.appendChild(line);
     }
     renderStatusLine();
-    if (myRole === "admin") addAdminButton();
   }
 
   function returnToOwnAccount() {
@@ -309,17 +324,6 @@
   }
 
   // ---------- Admin panel ----------
-  function addAdminButton() {
-    if (document.getElementById("adminPanelBtn")) return;
-    const btn = document.createElement("div");
-    btn.id = "adminPanelBtn";
-    btn.textContent = "🛠 Admin Panel";
-    btn.style.cssText =
-      "position:fixed;bottom:28px;right:8px;background:#4c7dff;color:#fff;font-size:11px;font-weight:600;padding:7px 12px;border-radius:20px;z-index:9998;font-family:Inter,sans-serif;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.3);";
-    btn.onclick = showAdminPanel;
-    document.body.appendChild(btn);
-  }
-
   async function showAdminPanel() {
     const wrap = ensureOverlay();
     wrap.innerHTML = `
