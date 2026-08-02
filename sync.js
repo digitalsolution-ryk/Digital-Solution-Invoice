@@ -44,8 +44,7 @@
     if (!uid || !auth.currentUser) return;
     const data = { updatedAt: Date.now() };
     if (!isImpersonating()) {
-      data.email = auth.currentUser.email;
-      data.name = auth.currentUser.displayName || "";
+      data.email = auth.currentUser.email; // name is admin-managed in Firestore, not overwritten here
     }
     SYNC_KEYS.forEach((k) => (data[k] = localStorage.getItem(k) || null));
     try {
@@ -355,7 +354,7 @@
         const isMe = doc.id === auth.currentUser.uid;
         const info = document.createElement("div");
         info.style.fontSize = "13px";
-        info.innerHTML = `<div>${d.name || "(no name)"} ${d.role === "admin" ? "⭐" : ""}</div><div style="color:#9aa1b5;font-size:11px;">${d.email || doc.id}</div>${permBadge(d)}`;
+        info.innerHTML = `<div>${d.name || "(no name)"} ${d.role === "admin" ? "⭐" : ""}${d.disabled ? ' <span style="color:#ff6b6b;">(disabled)</span>' : ""}</div><div style="color:#9aa1b5;font-size:11px;">${d.email || doc.id}</div>${permBadge(d)}`;
         row.appendChild(info);
         if (!isMe) {
           const btnCol = document.createElement("div");
@@ -368,7 +367,7 @@
           btnCol.appendChild(viewBtn);
           if (d.role !== "admin") {
             const permBtn = document.createElement("button");
-            permBtn.textContent = "Permissions";
+            permBtn.textContent = "Edit User";
             permBtn.style.cssText =
               "padding:5px 9px;border:1px solid #4c7dff;border-radius:6px;background:transparent;color:#4c7dff;font-size:11px;font-weight:600;";
             permBtn.onclick = () => showEditPermissionsScreen(doc.id, d);
@@ -452,7 +451,7 @@
         const cred = await secondaryAuth.createUserWithEmailAndPassword(email, pass);
         await cred.user.updateProfile({ displayName: name });
         await db.collection("users").doc(cred.user.uid).set(
-          { email, name, role: "user", permissions: perms, createdAt: Date.now() },
+          { email, name, role: "user", permissions: perms, disabled: false, createdAt: Date.now() },
           { merge: true }
         );
         await secondaryAuth.signOut();
@@ -463,27 +462,68 @@
     };
   }
 
-  // ---------- Screen: Edit an existing user's permissions ----------
+  // ---------- Screen: Edit an existing user (name, permissions, delete/restore) ----------
   function showEditPermissionsScreen(uid, userData) {
     const wrap = ensureOverlay();
+    const isDisabled = !!userData.disabled;
     wrap.innerHTML = `
-      <div style="${cardStyle}">
-        <h2 style="margin:0 0 4px;font-size:19px;">Permissions</h2>
-        <p style="margin:0 0 14px;font-size:12px;color:#9aa1b5;">${userData.name || userData.email || uid}</p>
+      <div style="${cardStyle}max-height:85vh;overflow-y:auto;">
+        <h2 style="margin:0 0 4px;font-size:19px;">Edit User</h2>
+        <p style="margin:0 0 12px;font-size:12px;color:#9aa1b5;">${userData.email || uid}</p>
+        <label style="display:block;font-size:12px;color:#9aa1b5;margin-bottom:4px;">Name</label>
+        <input id="epName" type="text" value="${(userData.name || "").replace(/"/g, "&quot;")}" style="${fieldStyle}">
         <div style="margin:10px 0;">${permissionFields(userData.permissions)}</div>
         <div id="epError" style="color:#ff6b6b;font-size:12px;margin-bottom:10px;min-height:14px;"></div>
-        <button id="epSaveBtn" style="${primaryBtn}">Save</button>
+        <button id="epSaveBtn" style="${primaryBtn}">Save Changes</button>
+        ${isDisabled
+          ? '<button id="epRestoreBtn" style="width:100%;padding:11px;border:none;border-radius:8px;background:#2a9d5c;color:#fff;font-weight:600;margin-bottom:8px;">Restore User (re-enable login)</button>'
+          : '<button id="epDeleteBtn" style="width:100%;padding:11px;border:none;border-radius:8px;background:#c0392b;color:#fff;font-weight:600;margin-bottom:8px;">Delete User (removes data &amp; blocks login)</button>'
+        }
         <button id="epBackBtn" style="width:100%;padding:9px;border:none;background:transparent;color:#6c7488;font-size:12px;">Back</button>
       </div>`;
     wrap.querySelector("#epBackBtn").onclick = () => showAdminPanel();
+
+    const errEl = wrap.querySelector("#epError");
+
     wrap.querySelector("#epSaveBtn").onclick = async () => {
       const perms = readPermissionFields(wrap);
+      const name = wrap.querySelector("#epName").value.trim();
       try {
-        await db.collection("users").doc(uid).set({ permissions: perms }, { merge: true });
+        await db.collection("users").doc(uid).set({ name, permissions: perms }, { merge: true });
         showAdminPanel();
       } catch (e) {
-        wrap.querySelector("#epError").textContent = e.message;
+        errEl.textContent = e.message;
       }
+    };
+
+    const deleteBtn = wrap.querySelector("#epDeleteBtn");
+    if (deleteBtn) {
+      deleteBtn.onclick = async () => {
+        if (!confirm("Pakka? Is user ka data mit jayega aur login block ho jayega. Ye undo ho sakta hai 'Restore' se, lekin data wapis nahi aayega.")) return;
+        try {
+          const clearedData = {};
+          SYNC_KEYS.forEach((k) => (clearedData[k] = null));
+          await db.collection("users").doc(uid).set(
+            { disabled: true, permissions: { viewOnly: true, invoices: false, payments: false }, ...clearedData },
+            { merge: true }
+          );
+          showAdminPanel();
+        } catch (e) {
+          errEl.textContent = e.message;
+        }
+      };
+    }
+
+    const restoreBtn = wrap.querySelector("#epRestoreBtn");
+    if (restoreBtn) {
+      restoreBtn.onclick = async () => {
+        try {
+          await db.collection("users").doc(uid).set({ disabled: false }, { merge: true });
+          showAdminPanel();
+        } catch (e) {
+          errEl.textContent = e.message;
+        }
+      };
     };
   }
 
@@ -534,6 +574,11 @@
       try {
         const ownDoc = await db.collection("users").doc(user.uid).get();
         const ownData = ownDoc.exists ? ownDoc.data() : {};
+        if (ownData.disabled && !isImpersonating()) {
+          await auth.signOut();
+          showSignInScreen(user.email, "Ye account admin ne disable kar diya hai. Apne admin se raabta karein.");
+          return;
+        }
         myRole = ownData.role || "user";
         if (myRole !== "admin" && !isImpersonating()) applyPermissions(ownData.permissions);
       } catch (e) {
