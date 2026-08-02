@@ -323,17 +323,25 @@
     pullFromCloud(auth.currentUser.uid).then(() => location.reload());
   }
 
+  // ---------- Secondary Firebase app — lets admin create a user without losing their own session ----------
+  const secondaryApp = firebase.apps.some((a) => a.name === "Secondary")
+    ? firebase.app("Secondary")
+    : firebase.initializeApp(firebaseConfig, "Secondary");
+  const secondaryAuth = secondaryApp.auth();
+
   // ---------- Admin panel ----------
   async function showAdminPanel() {
     const wrap = ensureOverlay();
     wrap.innerHTML = `
       <div style="${cardStyle}max-width:420px;max-height:80vh;overflow-y:auto;">
         <h2 style="margin:0 0 4px;font-size:19px;">Admin Panel — Users</h2>
-        <p style="margin:0 0 14px;font-size:12px;color:#9aa1b5;">Kisi bhi user ka data dekhne/edit karne ke liye "View/Edit" dabayein.</p>
-        <div id="adminUserList" style="margin-bottom:14px;">Loading...</div>
+        <p style="margin:0 0 14px;font-size:12px;color:#9aa1b5;">Kisi bhi user ka data dekhne/edit karne ke liye "View/Edit", ya permissions badalne ke liye "Permissions" dabayein.</p>
+        <button id="adminCreateUserBtn" style="${primaryBtn}">+ Create New User</button>
+        <div id="adminUserList" style="margin:10px 0 14px;">Loading...</div>
         <button id="adminCloseBtn" style="width:100%;padding:9px;border:none;background:transparent;color:#6c7488;font-size:12px;">Close</button>
       </div>`;
     wrap.querySelector("#adminCloseBtn").onclick = () => closeOverlay();
+    wrap.querySelector("#adminCreateUserBtn").onclick = () => showCreateUserScreen();
 
     const listEl = wrap.querySelector("#adminUserList");
     try {
@@ -343,19 +351,30 @@
         const d = doc.data();
         const row = document.createElement("div");
         row.style.cssText =
-          "display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid #262b3a;";
+          "display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid #262b3a;gap:6px;";
         const isMe = doc.id === auth.currentUser.uid;
         const info = document.createElement("div");
         info.style.fontSize = "13px";
-        info.innerHTML = `<div>${d.name || "(no name)"} ${d.role === "admin" ? "⭐" : ""}</div><div style="color:#9aa1b5;font-size:11px;">${d.email || doc.id}</div>`;
+        info.innerHTML = `<div>${d.name || "(no name)"} ${d.role === "admin" ? "⭐" : ""}</div><div style="color:#9aa1b5;font-size:11px;">${d.email || doc.id}</div>${permBadge(d)}`;
         row.appendChild(info);
         if (!isMe) {
+          const btnCol = document.createElement("div");
+          btnCol.style.cssText = "display:flex;flex-direction:column;gap:4px;";
           const viewBtn = document.createElement("button");
           viewBtn.textContent = "View/Edit";
           viewBtn.style.cssText =
-            "padding:6px 10px;border:none;border-radius:6px;background:#4c7dff;color:#fff;font-size:12px;font-weight:600;";
+            "padding:5px 9px;border:none;border-radius:6px;background:#4c7dff;color:#fff;font-size:11px;font-weight:600;";
           viewBtn.onclick = () => switchToUser(doc.id, d.email || doc.id);
-          row.appendChild(viewBtn);
+          btnCol.appendChild(viewBtn);
+          if (d.role !== "admin") {
+            const permBtn = document.createElement("button");
+            permBtn.textContent = "Permissions";
+            permBtn.style.cssText =
+              "padding:5px 9px;border:1px solid #4c7dff;border-radius:6px;background:transparent;color:#4c7dff;font-size:11px;font-weight:600;";
+            permBtn.onclick = () => showEditPermissionsScreen(doc.id, d);
+            btnCol.appendChild(permBtn);
+          }
+          row.appendChild(btnCol);
         } else {
           const meTag = document.createElement("span");
           meTag.textContent = "(you)";
@@ -370,6 +389,104 @@
     }
   }
 
+  function permBadge(d) {
+    if (d.role === "admin") return "";
+    const p = d.permissions || {};
+    if (p.viewOnly) return '<div style="color:#f5a623;font-size:10px;">View only</div>';
+    const bits = [];
+    if (p.invoices) bits.push("Invoices");
+    if (p.payments) bits.push("Payments");
+    return '<div style="color:#6cd97e;font-size:10px;">' + (bits.length ? bits.join(" + ") : "No access yet") + "</div>";
+  }
+
+  function permissionFields(existing) {
+    const p = existing || {};
+    return `
+      <label style="display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:13px;">
+        <input type="checkbox" id="permViewOnly" ${p.viewOnly ? "checked" : ""}> View only (no create/edit/delete anywhere)
+      </label>
+      <label style="display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:13px;">
+        <input type="checkbox" id="permInvoices" ${p.invoices ? "checked" : ""}> Invoice making &amp; editing
+      </label>
+      <label style="display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:13px;">
+        <input type="checkbox" id="permPayments" ${p.payments ? "checked" : ""}> Payment (voucher) making &amp; editing
+      </label>`;
+  }
+
+  function readPermissionFields(wrap) {
+    return {
+      viewOnly: wrap.querySelector("#permViewOnly").checked,
+      invoices: wrap.querySelector("#permInvoices").checked,
+      payments: wrap.querySelector("#permPayments").checked
+    };
+  }
+
+  // ---------- Screen: Create New User (admin only) ----------
+  function showCreateUserScreen() {
+    const wrap = ensureOverlay();
+    wrap.innerHTML = `
+      <div style="${cardStyle}max-height:85vh;overflow-y:auto;">
+        <h2 style="margin:0 0 4px;font-size:19px;">Create New User</h2>
+        <p style="margin:0 0 14px;font-size:12px;color:#9aa1b5;">Naya user aur uski permissions set karein.</p>
+        <input id="cuName" type="text" placeholder="Name" style="${fieldStyle}">
+        <input id="cuEmail" type="email" placeholder="Email" style="${fieldStyle}">
+        <input id="cuPassword" type="password" placeholder="Password (min 6 chars)" style="${fieldStyle}">
+        <div style="margin:10px 0;">${permissionFields()}</div>
+        <div id="cuError" style="color:#ff6b6b;font-size:12px;margin-bottom:10px;min-height:14px;"></div>
+        <button id="cuSubmitBtn" style="${primaryBtn}">Create User</button>
+        <button id="cuBackBtn" style="width:100%;padding:9px;border:none;background:transparent;color:#6c7488;font-size:12px;">Back</button>
+      </div>`;
+    wrap.querySelector("#cuBackBtn").onclick = () => showAdminPanel();
+
+    const errEl = wrap.querySelector("#cuError");
+    wrap.querySelector("#cuSubmitBtn").onclick = async () => {
+      errEl.textContent = "";
+      const name = wrap.querySelector("#cuName").value.trim();
+      const email = wrap.querySelector("#cuEmail").value.trim();
+      const pass = wrap.querySelector("#cuPassword").value;
+      if (!name || !email) { errEl.textContent = "Naam aur email likhein."; return; }
+      if (pass.length < 6) { errEl.textContent = "Password kam se kam 6 characters ka hona chahiye."; return; }
+      const perms = readPermissionFields(wrap);
+      try {
+        // Create via the secondary app instance so the admin's own session is untouched.
+        const cred = await secondaryAuth.createUserWithEmailAndPassword(email, pass);
+        await cred.user.updateProfile({ displayName: name });
+        await db.collection("users").doc(cred.user.uid).set(
+          { email, name, role: "user", permissions: perms, createdAt: Date.now() },
+          { merge: true }
+        );
+        await secondaryAuth.signOut();
+        showAdminPanel();
+      } catch (e) {
+        errEl.textContent = e.message;
+      }
+    };
+  }
+
+  // ---------- Screen: Edit an existing user's permissions ----------
+  function showEditPermissionsScreen(uid, userData) {
+    const wrap = ensureOverlay();
+    wrap.innerHTML = `
+      <div style="${cardStyle}">
+        <h2 style="margin:0 0 4px;font-size:19px;">Permissions</h2>
+        <p style="margin:0 0 14px;font-size:12px;color:#9aa1b5;">${userData.name || userData.email || uid}</p>
+        <div style="margin:10px 0;">${permissionFields(userData.permissions)}</div>
+        <div id="epError" style="color:#ff6b6b;font-size:12px;margin-bottom:10px;min-height:14px;"></div>
+        <button id="epSaveBtn" style="${primaryBtn}">Save</button>
+        <button id="epBackBtn" style="width:100%;padding:9px;border:none;background:transparent;color:#6c7488;font-size:12px;">Back</button>
+      </div>`;
+    wrap.querySelector("#epBackBtn").onclick = () => showAdminPanel();
+    wrap.querySelector("#epSaveBtn").onclick = async () => {
+      const perms = readPermissionFields(wrap);
+      try {
+        await db.collection("users").doc(uid).set({ permissions: perms }, { merge: true });
+        showAdminPanel();
+      } catch (e) {
+        wrap.querySelector("#epError").textContent = e.message;
+      }
+    };
+  }
+
   async function switchToUser(uid, email) {
     // Make sure the admin's own latest edits are saved first.
     if (!isImpersonating()) await pushToCloud();
@@ -379,15 +496,46 @@
     location.reload();
   }
 
+  // ---------- Enforce permissions in the UI for non-admin accounts ----------
+  function hide(selector) {
+    document.querySelectorAll(selector).forEach((el) => (el.style.display = "none"));
+  }
+
+  function applyPermissions(perms) {
+    if (!perms) perms = {};
+    const viewOnly = !!perms.viewOnly;
+    const canInvoices = !viewOnly && !!perms.invoices;
+    const canPayments = !viewOnly && !!perms.payments;
+
+    if (!canInvoices) {
+      hide('[data-view="builder"]');
+      hide("#btnSave");
+      hide('#invoicesView .hi-actions [data-act="del"]');
+    }
+    if (!canPayments) {
+      hide('[data-view="vouchers"]');
+      hide("#btnVoucherSave");
+      hide('#vouchersView .hi-actions [data-act="del"]');
+    }
+    if (viewOnly) {
+      hide("#btnCustSave");
+      hide("#btnSvcSave");
+      hide('#customersView .hi-actions [data-act="del"]');
+      hide('#servicesView .hi-actions [data-act="del"]');
+    }
+  }
+
   // ---------- Boot: wait for Firebase to resolve the real session before deciding ----------
   let resolved = false;
   auth.onAuthStateChanged(async (user) => {
     resolved = true;
     if (user) {
-      // Refresh role from own profile doc (not the impersonated one).
+      // Refresh role & permissions from own profile doc (not the impersonated one).
       try {
         const ownDoc = await db.collection("users").doc(user.uid).get();
-        myRole = ownDoc.exists ? ownDoc.data().role || "user" : "user";
+        const ownData = ownDoc.exists ? ownDoc.data() : {};
+        myRole = ownData.role || "user";
+        if (myRole !== "admin" && !isImpersonating()) applyPermissions(ownData.permissions);
       } catch (e) {
         myRole = "user";
       }
